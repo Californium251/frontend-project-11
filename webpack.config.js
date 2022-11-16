@@ -8,7 +8,7 @@ const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const isProduction = process.env.NODE_ENV == 'production';
 
 const config = {
-  entry: './src/index.js',
+  entry: './index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
   },
@@ -18,7 +18,7 @@ const config = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/html/index.html',
+      template: 'index.html',
     }),
 
     // Add your plugins here
