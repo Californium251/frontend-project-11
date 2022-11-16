@@ -1,6 +1,15 @@
-### Hexlet tests and linter status:
-[![Actions Status](https://github.com/Californium251/frontend-project-11/workflows/hexlet-check/badge.svg)](https://github.com/Californium251/frontend-project-11/actions)
+# 🚀 Welcome to your new awesome project!
 
-[![ESLint](https://github.com/Californium251/frontend-project-11/actions/workflows/github-actions.yml/badge.svg)](https://github.com/Californium251/frontend-project-11/actions/workflows/github-actions.yml)
+This project has been created using **webpack-cli**, you can now run
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/527115132f8ed3a958a6/maintainability)](https://codeclimate.com/github/Californium251/frontend-project-11/maintainability)
+```
+npm run build
+```
+
+or
+
+```
+yarn build
+```
+
+to bundle your application

@@ -2,8 +2,7 @@
   "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "[![Actions Status](https://github.com/Californium251/frontend-project-11/workflows/hexlet-check/badge.svg)](https://github.com/Californium251/frontend-project-11/actions)",
-  "main": "index.js",
-  "type": "module",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,8 +17,24 @@
   },
   "homepage": "https://github.com/Californium251/frontend-project-11#readme",
   "devDependencies": {
+    "@webpack-cli/generators": "^0.1.9",
+    "autoprefixer": "^10.4.13",
+    "css-loader": "^6.7.2",
     "eslint": "^8.27.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.26.0"
+    "eslint-plugin-import": "^2.26.0",
+    "html-webpack-plugin": "^5.5.0",
+    "postcss-loader": "^7.0.1",
+    "sass": "^1.56.1",
+    "sass-loader": "^13.2.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.11.1"
+  },
+  "dependencies": {
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.2",
+    "workbox-webpack-plugin": "^6.5.4"
   }
 }
