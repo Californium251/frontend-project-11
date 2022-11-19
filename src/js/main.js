@@ -14,14 +14,30 @@ const app = async () => {
     },
     feeds: [],
   };
+  const input = document.querySelector('#url-input');
+  const feedback = document.querySelector('.feedback');
   const watchedState = onChange(state, (path, value, previousValue) => {
-
+    if (path === 'rssLink.isValid') {
+      if (value === false) {
+        input.classList.add('is-invalid');
+        feedback.textContent = 'Ссылка должна быть валидным URL';
+      } else {
+        input.classList.remove('is-invalid');
+        feedback.textContent = ' ';
+      }
+    }
   });
   const inputSchema = string().required().url();
-  document.querySelector('#url-input').addEventListener('keyup', (evt) => {
-    console.log('ok');
-    inputSchema.isValid(evt.target.value)
-      .then((val) => console.log(val));
+  document.querySelector('.rss-form').addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    inputSchema.isValid(input.value.trim())
+      .then((val) => {
+        if (val) {
+          watchedState.rssLink.isValid = true;
+        } else {
+          watchedState.rssLink.isValid = false;
+        }
+      });
   });
 };
 
