@@ -11,17 +11,17 @@ const config = {
   entry: './src/js/main.js',
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
+    path: __dirname,
   },
   devServer: {
-    static: path.resolve(__dirname, 'dist'),
+    static: __dirname,
     port: 8080,
     hot: true,
     open: true,
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'dist/index.html'),
+      template: path.resolve(__dirname, 'index.html'),
     }),
 
     // Add your plugins here
