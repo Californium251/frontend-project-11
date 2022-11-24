@@ -116,7 +116,7 @@ const app = async () => {
                   evt.preventDefault();
                   watchedState.modal = 'hidden';
                 };
-                document.querySelectorAll('[data-modal="close"]').forEach((el) => {
+                document.querySelectorAll('[data-bs-dismiss="modal"]').forEach((el) => {
                   el.addEventListener('click', closeModal);
                 });
               });
@@ -124,7 +124,8 @@ const app = async () => {
           }
         })
         .catch((e) => {
-          console.log(e);
+          state.rssLink.error = e;
+          watchedState.rssLink.isValid = false;
         });
     });
   });
