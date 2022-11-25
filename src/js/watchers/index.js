@@ -7,6 +7,7 @@ import addItem from './addItem';
 import showDialogBlock from './showDialogBlock';
 import hideDialogBlock from './hideDialogBlock';
 import markPostWatched from './markPostWatched';
+import alertRSSloaded from './alertRSSloaded';
 
 export default {
   addRedBorderToInput,
@@ -18,4 +19,5 @@ export default {
   showDialogBlock,
   hideDialogBlock,
   markPostWatched,
+  alertRSSloaded,
 };

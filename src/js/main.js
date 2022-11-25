@@ -10,8 +10,6 @@ import parser from './parsers/index';
 import feedIsAdded from './feedIsAdded';
 import getNewPosts from './getNewPosts';
 import hideDialogBlock from './watchers/hideDialogBlock';
-import { hide } from '@popperjs/core';
-
 // Import all of Bootstrap's JS
 // import * as bootstrap from 'bootstrap';
 
@@ -47,12 +45,15 @@ const app = async () => {
         hideDialogBlock(modal);
         state.modal = 'hidden';
       });
-    })
+    });
     const watchedState = onChange(state, (path, value, previousValue) => {
       const modalCallback = (evt, post) => {
         evt.preventDefault();
         watchedState.modal = post;
         watchers.markPostWatched(document.querySelector(`[data-post-id="${post.postID}"]`));
+      };
+      if (path === 'rssLink.RSSadded') {
+        watchers.alertRSSloaded(feedback, value);
       }
       if (path === 'rssLink.isValid') {
         watchers.addRedBorderToInput(state.rssLink.isValid, input);
@@ -89,13 +90,16 @@ const app = async () => {
     form.addEventListener('submit', (evt) => {
       evt.preventDefault();
       const url = input.value.trim();
+      if (url.length === 0) {
+        throw new Error(i18nextInstance.t('blankInput'));
+      }
       inputSchema.isValid(url)
         .then((val) => {
           if (!val) {
             state.rssLink.error = i18nextInstance.t('invalidUrl');
             watchedState.rssLink.isValid = false;
           } else {
-            state.rssLink.error = i18nextInstance.t('');
+            state.rssLink.error = '';
             watchedState.rssLink.isValid = true;
           }
         })
@@ -112,6 +116,10 @@ const app = async () => {
           });
         })
         .then((res) => {
+          if (!res.data.status.content_type.includes('application/rss+xml')) {
+            throw new Error(i18nextInstance.t('noRSS'));
+          }
+          watchedState.rssLink.RSSadded = i18nextInstance.t('RSSok');
           const { feedData, postsData } = parser(res.data.contents, url);
           if (!feedIsAdded(state, url)) {
             watchedState.feeds.push({
@@ -120,9 +128,9 @@ const app = async () => {
               description: feedData.description,
             });
             postsData.forEach((post) => {
-              post.postID = state.postID;
+              // post.postID = state.postID;
               watchedState.posts.push(post);
-              state.postID += 1;
+              // state.postID += 1;
             });
           }
         })
@@ -141,7 +149,7 @@ const app = async () => {
                   watchedState.posts.push(newPost);
                   state.postID += 1;
                 });
-              })
+              });
             });
           };
           const setInt = (fn, delay) => {
@@ -154,7 +162,11 @@ const app = async () => {
           setInt(makeReq, 5000);
         })
         .catch((e) => {
-          state.rssLink.error = e;
+          if (e.code === 'ERR_NETWORK') {
+            state.rssLink.error = i18nextInstance.t(e.code);
+          } else {
+            state.rssLink.error = e.message;
+          }
           watchedState.rssLink.isValid = false;
         });
     });
