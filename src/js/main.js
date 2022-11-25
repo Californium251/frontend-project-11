@@ -10,8 +10,6 @@ import parser from './parsers/index';
 import feedIsAdded from './feedIsAdded';
 import getNewPosts from './getNewPosts';
 import hideDialogBlock from './watchers/hideDialogBlock';
-// Import all of Bootstrap's JS
-// import * as bootstrap from 'bootstrap';
 
 const app = async () => {
   const state = {
