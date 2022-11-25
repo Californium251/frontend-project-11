@@ -1,5 +1,4 @@
 export default (html, feedUrl) => {
-  console.log(html);
   const items = Array.from(html.querySelectorAll('item'))
     .map((item) => {
       const itemTitle = item.querySelector('title').textContent;
@@ -10,6 +9,7 @@ export default (html, feedUrl) => {
         title: itemTitle,
         link: itemLink,
         description,
+        watched: false,
       };
     });
   return items;

@@ -7,7 +7,10 @@ import i18next from 'i18next';
 import resources from './locales/index';
 import watchers from './watchers/index';
 import parser from './parsers/index';
-import checkFeed from './checkFeed';
+import feedIsAdded from './feedIsAdded';
+import getNewPosts from './getNewPosts';
+import hideDialogBlock from './watchers/hideDialogBlock';
+import { hide } from '@popperjs/core';
 
 // Import all of Bootstrap's JS
 // import * as bootstrap from 'bootstrap';
@@ -21,6 +24,7 @@ const app = async () => {
     },
     feeds: [],
     posts: [],
+    watchedPosts: [],
     postID: 0,
     modal: 'hidden',
   };
@@ -36,7 +40,20 @@ const app = async () => {
     debug: true,
     resources: { en, ru },
   }).then(() => {
+    const modal = document.querySelector('#modal');
+    modal.querySelectorAll('[data-bs-dismiss="modal"]').forEach((el) => {
+      el.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        hideDialogBlock(modal);
+        state.modal = 'hidden';
+      });
+    })
     const watchedState = onChange(state, (path, value, previousValue) => {
+      const modalCallback = (evt, post) => {
+        evt.preventDefault();
+        watchedState.modal = post;
+        watchers.markPostWatched(document.querySelector(`[data-post-id="${post.postID}"]`));
+      }
       if (path === 'rssLink.isValid') {
         watchers.addRedBorderToInput(state.rssLink.isValid, input);
         watchers.showHideError(state.rssLink.isValid, feedback, state.rssLink.error);
@@ -53,13 +70,13 @@ const app = async () => {
           watchers.addItemsList(posts, i18nextInstance.t('itemsHeader'));
         }
         const list = posts.querySelector('.list-group');
-        watchers.addItem(value[value.length - 1], list, i18nextInstance.t('showItemButton'));
+        watchers.addItem(value[value.length - 1], list, i18nextInstance.t('showItemButton'), modalCallback);
       }
       if (path === 'modal') {
         if (value === 'hidden') {
           watchers.hideDialogBlock(document.querySelector('#modal'));
         } else {
-          watchers.showDialogBlock(document.querySelector('#modal'), value[0]);
+          watchers.showDialogBlock(document.querySelector('#modal'), value);
         }
       }
     });
@@ -83,7 +100,7 @@ const app = async () => {
           }
         })
         .then(() => {
-          if (checkFeed(state, url)) {
+          if (feedIsAdded(state, url)) {
             state.rssLink.error = i18nextInstance.t('RSSalreadyExists');
             watchedState.rssLink.isValid = false;
             throw new Error(i18nextInstance('RSSalreadyExists'));
@@ -96,7 +113,7 @@ const app = async () => {
         })
         .then((res) => {
           const { feedData, postsData } = parser(res.data.contents, url);
-          if (!checkFeed(state, url)) {
+          if (!feedIsAdded(state, url)) {
             watchedState.feeds.push({
               url,
               title: feedData.title,
@@ -104,24 +121,37 @@ const app = async () => {
             });
             postsData.forEach((post) => {
               post.postID = state.postID;
-              state.postID += 1;
               watchedState.posts.push(post);
-            });
-            document.querySelectorAll('[data-bs-toggle="modal"]').forEach((elem) => {
-              elem.addEventListener('click', (event) => {
-                event.preventDefault();
-                const targetPost = state.posts.filter((el) => el.postID === +event.target.getAttribute('data-post-id'));
-                watchedState.modal = targetPost;
-                const closeModal = (evt) => {
-                  evt.preventDefault();
-                  watchedState.modal = 'hidden';
-                };
-                document.querySelectorAll('[data-bs-dismiss="modal"]').forEach((el) => {
-                  el.addEventListener('click', closeModal);
-                });
-              });
+              state.postID += 1;
             });
           }
+        })
+        .then(() => {
+          const makeReq = () => {
+            const promises = state.feeds.reduce((acc, feed) => {
+              acc.push(axios.get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`));
+              return acc;
+            }, []);
+            Promise.all(promises).then((res) => {
+              res.forEach((el) => {
+                const { postsData } = parser(el.data.contents, el.data.status.url);
+                const newPosts = getNewPosts(state.posts, postsData);
+                newPosts.forEach((newPost) => {
+                  newPost.postID = state.postID;
+                  watchedState.posts.push(newPost);
+                  state.postID += 1;
+                });
+              })
+            });
+          };
+          const setInt = (fn, delay) => {
+            const wrapper = () => {
+              fn();
+              return setTimeout(wrapper, delay);
+            };
+            setTimeout(wrapper, delay);
+          };
+          setInt(makeReq, 5000);
         })
         .catch((e) => {
           state.rssLink.error = e;
