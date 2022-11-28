@@ -5,11 +5,10 @@ import onChange from 'on-change';
 import { setLocale, string } from 'yup';
 import i18next from 'i18next';
 import resources from './locales/index';
-import watchers from './watchers/index';
-import parser from './parsers/index';
+import watchers from './index';
+import parser from './parser';
 import feedIsAdded from './feedIsAdded';
 import getNewPosts from './getNewPosts';
-import hideDialogBlock from './watchers/hideDialogBlock';
 import 'bootstrap';
 
 const app = async () => {
@@ -41,7 +40,6 @@ const app = async () => {
     modal.querySelectorAll('[data-bs-dismiss="modal"]').forEach((el) => {
       el.addEventListener('click', (evt) => {
         evt.preventDefault();
-        hideDialogBlock(modal);
         state.modal = 'hidden';
       });
     });
@@ -73,11 +71,7 @@ const app = async () => {
         watchers.addItem(value[value.length - 1], list, i18nextInstance.t('showItemButton'), modalCallback);
       }
       if (path === 'modal') {
-        if (value === 'hidden') {
-          watchers.hideDialogBlock(document.querySelector('#modal'));
-        } else {
-          watchers.showDialogBlock(document.querySelector('#modal'), value);
-        }
+        watchers.showDialogBlock(document.querySelector('#modal'), value);
       }
     });
     const inputSchema = string().required().url();

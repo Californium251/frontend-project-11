@@ -11,6 +11,7 @@ export default (state, element, buttonText, cb) => {
   button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
   button.setAttribute('type', 'button');
   button.setAttribute('data-bs-toggle', 'modal');
+  button.setAttribute('data-bs-target', '#modal');
   button.setAttribute('data-post-id', state.postID);
   button.textContent = buttonText;
   button.addEventListener('click', (evt) => {
