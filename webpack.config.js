@@ -3,16 +3,13 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // eslint-disable-next-line eqeqeq
 const isProduction = process.env.NODE_ENV == 'production';
 
 const config = {
   entry: './src/js/main.js',
-  output: {
-    filename: 'main.js',
-    path: __dirname,
-  },
   devServer: {
     static: __dirname,
     port: 8080,
@@ -20,6 +17,7 @@ const config = {
     open: true,
   },
   plugins: [
+    new MiniCssExtractPlugin(),
     new HtmlWebpackPlugin({
       template: path.resolve(__dirname, 'index.html'),
     }),
@@ -34,23 +32,17 @@ const config = {
         type: 'asset',
       },
       {
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'style-loader', 'css-loader'],
+      },
+      {
         test: /\.(scss)$/,
         use: [
           {
-            loader: 'style-loader',
+            loader: MiniCssExtractPlugin.loader,
           },
           {
             loader: 'css-loader',
-          },
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: () => [
-                  require('autoprefixer'),
-                ],
-              },
-            },
           },
           {
             loader: 'sass-loader',

@@ -10,6 +10,7 @@ import parser from './parsers/index';
 import feedIsAdded from './feedIsAdded';
 import getNewPosts from './getNewPosts';
 import hideDialogBlock from './watchers/hideDialogBlock';
+import 'bootstrap';
 
 const app = async () => {
   const state = {
@@ -126,9 +127,9 @@ const app = async () => {
               description: feedData.description,
             });
             postsData.forEach((post) => {
-              // post.postID = state.postID;
+              post.postID = state.postID;
               watchedState.posts.push(post);
-              // state.postID += 1;
+              state.postID += 1;
             });
           }
         })
@@ -171,4 +172,4 @@ const app = async () => {
   });
 };
 
-app();
+export default app();
