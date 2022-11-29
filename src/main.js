@@ -1,11 +1,9 @@
-// Import our custom CSS
 import axios from 'axios';
-import '../scss/styles.scss';
 import onChange from 'on-change';
 import { setLocale, string } from 'yup';
 import i18next from 'i18next';
 import resources from './locales/index';
-import watchers from './index';
+import watchers from './watchers';
 import parser from './parser';
 import feedIsAdded from './feedIsAdded';
 import getNewPosts from './getNewPosts';
@@ -47,28 +45,27 @@ const app = async () => {
       const modalCallback = (evt, post) => {
         evt.preventDefault();
         watchedState.modal = post;
-        watchers.markPostWatched(document.querySelector(`[data-post-id="${post.postID}"]`));
       };
       if (path === 'rssLink.RSSadded') {
         watchers.alertRSSloaded(feedback, value);
       }
       if (path === 'rssLink.isValid') {
-        watchers.addRedBorderToInput(state.rssLink.isValid, input);
-        watchers.showHideError(state.rssLink.isValid, feedback, state.rssLink.error);
+        watchers.showHideError(state.rssLink.isValid, feedback, input, state.rssLink.error);
       }
       if (path === 'feeds') {
-        if (previousValue.length === 0) {
-          watchers.addFeedCard(feeds, i18nextInstance.t('feedsHeader'));
-        }
-        const list = feeds.querySelector('.list-group');
-        watchers.addFeed(value[value.length - 1], list);
+        const feedListIsToBeAdded = previousValue.length === 0;
+        watchers.addFeed(value[value.length - 1], feeds, feedListIsToBeAdded, i18nextInstance.t('feedsHeader'));
       }
       if (path === 'posts') {
-        if (previousValue.length === 0) {
-          watchers.addItemsList(posts, i18nextInstance.t('itemsHeader'));
-        }
-        const list = posts.querySelector('.list-group');
-        watchers.addItem(value[value.length - 1], list, i18nextInstance.t('showItemButton'), modalCallback);
+        const listIsToBeAdded = previousValue.length === 0;
+        watchers.addItem(
+          value[value.length - 1],
+          posts,
+          i18nextInstance.t('showItemButton'),
+          modalCallback,
+          listIsToBeAdded,
+          i18nextInstance.t('itemsHeader'),
+        );
       }
       if (path === 'modal') {
         watchers.showDialogBlock(document.querySelector('#modal'), value);
@@ -121,7 +118,8 @@ const app = async () => {
               description: feedData.description,
             });
             postsData.forEach((post) => {
-              post.postID = state.postID;
+              const newPost = post;
+              newPost.postID = state.postID;
               watchedState.posts.push(post);
               state.postID += 1;
             });
@@ -138,7 +136,8 @@ const app = async () => {
                 const { postsData } = parser(el.data.contents, el.data.status.url);
                 const newPosts = getNewPosts(state.posts, postsData);
                 newPosts.forEach((newPost) => {
-                  newPost.postID = state.postID;
+                  const post = newPost;
+                  post.postID = state.postID;
                   watchedState.posts.push(newPost);
                   state.postID += 1;
                 });
@@ -166,4 +165,4 @@ const app = async () => {
   });
 };
 
-export default app();
+export default app;

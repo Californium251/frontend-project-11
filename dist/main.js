@@ -2120,14 +2120,14 @@ eval("var asciiWords = __webpack_require__(/*! ./_asciiWords */ \"./node_modules
 
 /***/ }),
 
-/***/ "./src/scss/styles.scss":
-/*!******************************!*\
-  !*** ./src/scss/styles.scss ***!
-  \******************************/
+/***/ "./src/styles.scss":
+/*!*************************!*\
+  !*** ./src/styles.scss ***!
+  \*************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://@hexlet/code/./src/scss/styles.scss?");
+eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://@hexlet/code/./src/styles.scss?");
 
 /***/ }),
 
@@ -2449,223 +2449,157 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./src/js/feedIsAdded.js":
-/*!*******************************!*\
-  !*** ./src/js/feedIsAdded.js ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, feed) => state.feeds.reduce((acc, el) => {\n  if (el.url === feed) {\n    acc = true;\n  }\n  return acc;\n}, false));\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/feedIsAdded.js?");
-
-/***/ }),
-
-/***/ "./src/js/getNewPosts.js":
-/*!*******************************!*\
-  !*** ./src/js/getNewPosts.js ***!
-  \*******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, posts) => {\n  const flatState = state.map((el) => el.link);\n  return posts.filter((el) => !flatState.includes(el.link));\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/getNewPosts.js?");
-
-/***/ }),
-
-/***/ "./src/js/locales/en.js":
-/*!******************************!*\
-  !*** ./src/js/locales/en.js ***!
-  \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({\n  translation: {\n    invalidUrl: 'The link should be a valid URL',\n  },\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/locales/en.js?");
-
-/***/ }),
-
-/***/ "./src/js/locales/index.js":
-/*!*********************************!*\
-  !*** ./src/js/locales/index.js ***!
-  \*********************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _en__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./en */ \"./src/js/locales/en.js\");\n/* harmony import */ var _ru__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ru */ \"./src/js/locales/ru.js\");\n\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ ru: _ru__WEBPACK_IMPORTED_MODULE_1__[\"default\"], en: _en__WEBPACK_IMPORTED_MODULE_0__[\"default\"] });\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/locales/index.js?");
-
-/***/ }),
-
-/***/ "./src/js/locales/ru.js":
-/*!******************************!*\
-  !*** ./src/js/locales/ru.js ***!
-  \******************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({\n  translation: {\n    RSSok: 'RSS успешно загружен',\n    invalidUrl: 'Ссылка должна быть валидным URL',\n    ERR_NETWORK: 'Ошибка сети',\n    noRSS: 'Ресурс не содержит валидный RSS',\n    blankInput: 'Не должно быть пустым',\n    feedsHeader: 'Фиды',\n    itemsHeader: 'Посты',\n    showItemButton: 'Просмотр',\n    RSSalreadyExists: 'RSS уже существует',\n    closeModal: 'Закрыть',\n    modalRead: 'Читать полностью',\n  },\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/locales/ru.js?");
-
-/***/ }),
-
-/***/ "./src/js/main.js":
+/***/ "./src/addFeed.js":
 /*!************************!*\
-  !*** ./src/js/main.js ***!
+  !*** ./src/addFeed.js ***!
   \************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var _scss_styles_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../scss/styles.scss */ \"./src/scss/styles.scss\");\n/* harmony import */ var on_change__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! on-change */ \"./node_modules/on-change/index.js\");\n/* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! yup */ \"./node_modules/yup/es/index.js\");\n/* harmony import */ var i18next__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! i18next */ \"./node_modules/i18next/dist/esm/i18next.js\");\n/* harmony import */ var _locales_index__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./locales/index */ \"./src/js/locales/index.js\");\n/* harmony import */ var _watchers_index__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./watchers/index */ \"./src/js/watchers/index.js\");\n/* harmony import */ var _parsers_index__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./parsers/index */ \"./src/js/parsers/index.js\");\n/* harmony import */ var _feedIsAdded__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./feedIsAdded */ \"./src/js/feedIsAdded.js\");\n/* harmony import */ var _getNewPosts__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./getNewPosts */ \"./src/js/getNewPosts.js\");\n/* harmony import */ var _watchers_hideDialogBlock__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./watchers/hideDialogBlock */ \"./src/js/watchers/hideDialogBlock.js\");\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! bootstrap */ \"./node_modules/bootstrap/dist/js/bootstrap.esm.js\");\n// Import our custom CSS\n\n\n\n\n\n\n\n\n\n\n\n\n\nconst app = async () => {\n  const state = {\n    rssLink: {\n      value: '',\n      isValid: true,\n      error: '',\n    },\n    feeds: [],\n    posts: [],\n    watchedPosts: [],\n    postID: 0,\n    modal: 'hidden',\n  };\n  const input = document.querySelector('#url-input');\n  const feedback = document.querySelector('.feedback');\n  const i18nextInstance = i18next__WEBPACK_IMPORTED_MODULE_4__[\"default\"].createInstance();\n  const form = document.querySelector('.rss-form');\n  const feeds = document.querySelector('.feeds');\n  const posts = document.querySelector('.posts');\n  const { ru, en } = _locales_index__WEBPACK_IMPORTED_MODULE_5__[\"default\"];\n  i18nextInstance.init({\n    lng: 'ru',\n    debug: true,\n    resources: { en, ru },\n  }).then(() => {\n    const modal = document.querySelector('#modal');\n    modal.querySelectorAll('[data-bs-dismiss=\"modal\"]').forEach((el) => {\n      el.addEventListener('click', (evt) => {\n        evt.preventDefault();\n        (0,_watchers_hideDialogBlock__WEBPACK_IMPORTED_MODULE_10__[\"default\"])(modal);\n        state.modal = 'hidden';\n      });\n    });\n    const watchedState = (0,on_change__WEBPACK_IMPORTED_MODULE_2__[\"default\"])(state, (path, value, previousValue) => {\n      const modalCallback = (evt, post) => {\n        evt.preventDefault();\n        watchedState.modal = post;\n        _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].markPostWatched(document.querySelector(`[data-post-id=\"${post.postID}\"]`));\n      };\n      if (path === 'rssLink.RSSadded') {\n        _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].alertRSSloaded(feedback, value);\n      }\n      if (path === 'rssLink.isValid') {\n        _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].addRedBorderToInput(state.rssLink.isValid, input);\n        _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].showHideError(state.rssLink.isValid, feedback, state.rssLink.error);\n      }\n      if (path === 'feeds') {\n        if (previousValue.length === 0) {\n          _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].addFeedCard(feeds, i18nextInstance.t('feedsHeader'));\n        }\n        const list = feeds.querySelector('.list-group');\n        _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].addFeed(value[value.length - 1], list);\n      }\n      if (path === 'posts') {\n        if (previousValue.length === 0) {\n          _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].addItemsList(posts, i18nextInstance.t('itemsHeader'));\n        }\n        const list = posts.querySelector('.list-group');\n        _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].addItem(value[value.length - 1], list, i18nextInstance.t('showItemButton'), modalCallback);\n      }\n      if (path === 'modal') {\n        if (value === 'hidden') {\n          _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].hideDialogBlock(document.querySelector('#modal'));\n        } else {\n          _watchers_index__WEBPACK_IMPORTED_MODULE_6__[\"default\"].showDialogBlock(document.querySelector('#modal'), value);\n        }\n      }\n    });\n    const inputSchema = (0,yup__WEBPACK_IMPORTED_MODULE_3__.string)().required().url();\n    (0,yup__WEBPACK_IMPORTED_MODULE_3__.setLocale)({\n      string: {\n        url: i18next__WEBPACK_IMPORTED_MODULE_4__[\"default\"].t('invalidUrl'),\n      },\n    });\n    form.addEventListener('submit', (evt) => {\n      evt.preventDefault();\n      const url = input.value.trim();\n      if (url.length === 0) {\n        throw new Error(i18nextInstance.t('blankInput'));\n      }\n      inputSchema.isValid(url)\n        .then((val) => {\n          if (!val) {\n            state.rssLink.error = i18nextInstance.t('invalidUrl');\n            watchedState.rssLink.isValid = false;\n          } else {\n            state.rssLink.error = '';\n            watchedState.rssLink.isValid = true;\n          }\n        })\n        .then(() => {\n          if ((0,_feedIsAdded__WEBPACK_IMPORTED_MODULE_8__[\"default\"])(state, url)) {\n            state.rssLink.error = i18nextInstance.t('RSSalreadyExists');\n            watchedState.rssLink.isValid = false;\n            throw new Error(i18nextInstance('RSSalreadyExists'));\n          }\n          return new Promise((resolve, reject) => {\n            axios__WEBPACK_IMPORTED_MODULE_0__[\"default\"].get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)\n              .then((result) => resolve(result))\n              .catch((e) => reject(e));\n          });\n        })\n        .then((res) => {\n          if (!res.data.status.content_type.includes('application/rss+xml')) {\n            throw new Error(i18nextInstance.t('noRSS'));\n          }\n          watchedState.rssLink.RSSadded = i18nextInstance.t('RSSok');\n          const { feedData, postsData } = (0,_parsers_index__WEBPACK_IMPORTED_MODULE_7__[\"default\"])(res.data.contents, url);\n          if (!(0,_feedIsAdded__WEBPACK_IMPORTED_MODULE_8__[\"default\"])(state, url)) {\n            watchedState.feeds.push({\n              url,\n              title: feedData.title,\n              description: feedData.description,\n            });\n            postsData.forEach((post) => {\n              post.postID = state.postID;\n              watchedState.posts.push(post);\n              state.postID += 1;\n            });\n          }\n        })\n        .then(() => {\n          const makeReq = () => {\n            const promises = state.feeds.reduce((acc, feed) => {\n              acc.push(axios__WEBPACK_IMPORTED_MODULE_0__[\"default\"].get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`));\n              return acc;\n            }, []);\n            Promise.all(promises).then((res) => {\n              res.forEach((el) => {\n                const { postsData } = (0,_parsers_index__WEBPACK_IMPORTED_MODULE_7__[\"default\"])(el.data.contents, el.data.status.url);\n                const newPosts = (0,_getNewPosts__WEBPACK_IMPORTED_MODULE_9__[\"default\"])(state.posts, postsData);\n                newPosts.forEach((newPost) => {\n                  newPost.postID = state.postID;\n                  watchedState.posts.push(newPost);\n                  state.postID += 1;\n                });\n              });\n            });\n          };\n          const setInt = (fn, delay) => {\n            const wrapper = () => {\n              fn();\n              return setTimeout(wrapper, delay);\n            };\n            setTimeout(wrapper, delay);\n          };\n          setInt(makeReq, 5000);\n        })\n        .catch((e) => {\n          if (e.code === 'ERR_NETWORK') {\n            state.rssLink.error = i18nextInstance.t(e.code);\n          } else {\n            state.rssLink.error = e.message;\n          }\n          watchedState.rssLink.isValid = false;\n        });\n    });\n  });\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (app());\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst addFeedList = (element, header) => {\n  const card = document.createElement('div');\n  const cardBody = document.createElement('div');\n  const cardBodyHeader = document.createElement('h2');\n  const list = document.createElement('ul');\n  card.classList.add('card', 'border-0');\n  cardBody.classList.add('card-body');\n  cardBodyHeader.classList.add('card-title', 'h4');\n  list.classList.add('list-group', 'border-0', 'rounded-0');\n  cardBodyHeader.textContent = header;\n  cardBody.append(cardBodyHeader);\n  card.append(cardBody);\n  card.append(list);\n  element.append(card);\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, element, feedListIsToBeAdded, feedsHeader) => {\n  if (feedListIsToBeAdded) {\n    addFeedList(element, feedsHeader);\n  }\n  const feedList = element.querySelector('.list-group');\n  const li = document.createElement('li');\n  const title = document.createElement('h3');\n  const paragraph = document.createElement('p');\n  li.classList.add('list-group-item', 'border-0', 'border-end-0');\n  title.classList.add('h6', 'm-0');\n  paragraph.classList.add('m-0', 'small', 'text-black-50');\n  title.textContent = state.title;\n  paragraph.textContent = state.description;\n  li.append(title);\n  li.append(paragraph);\n  feedList.append(li);\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/addFeed.js?");
 
 /***/ }),
 
-/***/ "./src/js/parsers/feedParser.js":
-/*!**************************************!*\
-  !*** ./src/js/parsers/feedParser.js ***!
-  \**************************************/
+/***/ "./src/addItem.js":
+/*!************************!*\
+  !*** ./src/addItem.js ***!
+  \************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((html) => {\n  const title = html.querySelector('title').textContent;\n  const description = html.querySelector('description').innerHTML;\n  return { title, description };\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/parsers/feedParser.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst addItemsList = (element, header) => {\n  const card = document.createElement('div');\n  const cardBody = document.createElement('div');\n  const cardHeader = document.createElement('h2');\n  const ul = document.createElement('ul');\n  card.classList.add('card', 'border-0');\n  cardBody.classList.add('card-body');\n  cardHeader.classList.add('card-title', 'h4');\n  ul.classList.add('list-group', 'border-0', 'rounded-0');\n  cardHeader.textContent = header;\n  cardBody.append(cardHeader);\n  card.append(cardBody);\n  card.append(ul);\n  element.append(card);\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, element, buttonText, cb, listIsToBeAdded, itemsHeader) => {\n  if (listIsToBeAdded) {\n    addItemsList(element, itemsHeader);\n  }\n  const itemsList = element.querySelector('.list-group');\n  const li = document.createElement('li');\n  const link = document.createElement('a');\n  const button = document.createElement('button');\n  li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');\n  link.classList.add('fw-bold');\n  link.setAttribute('target', '_blank');\n  link.setAttribute('href', state.link);\n  link.setAttribute('data-post-id', state.postID);\n  link.textContent = state.title;\n  button.classList.add('btn', 'btn-outline-primary', 'btn-sm');\n  button.setAttribute('type', 'button');\n  button.setAttribute('data-bs-toggle', 'modal');\n  button.setAttribute('data-bs-target', '#modal');\n  button.setAttribute('data-post-id', state.postID);\n  button.textContent = buttonText;\n  button.addEventListener('click', (evt) => {\n    cb.call(null, evt, state);\n  });\n  li.append(link);\n  li.append(button);\n  itemsList.append(li);\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/addItem.js?");
 
 /***/ }),
 
-/***/ "./src/js/parsers/index.js":
-/*!*********************************!*\
-  !*** ./src/js/parsers/index.js ***!
-  \*********************************/
+/***/ "./src/alertRSSloaded.js":
+/*!*******************************!*\
+  !*** ./src/alertRSSloaded.js ***!
+  \*******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _feedParser__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./feedParser */ \"./src/js/parsers/feedParser.js\");\n/* harmony import */ var _postsParser__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./postsParser */ \"./src/js/parsers/postsParser.js\");\n\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((data, url) => {\n  const domParser = new DOMParser();\n  const parsedData = domParser.parseFromString(data, 'text/html');\n  return {\n    feedData: (0,_feedParser__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(parsedData),\n    postsData: (0,_postsParser__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(parsedData, url),\n  };\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/parsers/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((input, content) => {\n  const newInput = input;\n  newInput.classList.add('text-success');\n  newInput.classList.remove('text-danger');\n  newInput.textContent = content;\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/alertRSSloaded.js?");
 
 /***/ }),
 
-/***/ "./src/js/parsers/postsParser.js":
-/*!***************************************!*\
-  !*** ./src/js/parsers/postsParser.js ***!
-  \***************************************/
+/***/ "./src/feedIsAdded.js":
+/*!****************************!*\
+  !*** ./src/feedIsAdded.js ***!
+  \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((html, feedUrl) => {\n  const items = Array.from(html.querySelectorAll('item'))\n    .map((item) => {\n      const itemTitle = item.querySelector('title').textContent;\n      const itemLink = item.querySelector('guid').textContent;\n      const description = item.querySelector('description').innerHTML;\n      return {\n        url: feedUrl,\n        title: itemTitle,\n        link: itemLink,\n        description,\n        watched: false,\n      };\n    });\n  return items;\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/parsers/postsParser.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, feed) => {\n  let flag = false;\n  state.feeds.forEach((el) => {\n    if (el.url === feed) {\n      flag = true;\n    }\n  });\n  return flag;\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/feedIsAdded.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/addFeed.js":
-/*!************************************!*\
-  !*** ./src/js/watchers/addFeed.js ***!
-  \************************************/
+/***/ "./src/getNewPosts.js":
+/*!****************************!*\
+  !*** ./src/getNewPosts.js ***!
+  \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, element) => {\n  const li = document.createElement('li');\n  const title = document.createElement('h3');\n  const paragraph = document.createElement('p');\n  li.classList.add('list-group-item', 'border-0', 'border-end-0');\n  title.classList.add('h6', 'm-0');\n  paragraph.classList.add('m-0', 'small', 'text-black-50');\n  title.textContent = state.title;\n  paragraph.textContent = state.description;\n  li.append(title);\n  li.append(paragraph);\n  element.append(li);\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/addFeed.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, posts) => {\n  const flatState = state.map((el) => el.link);\n  return posts.filter((el) => !flatState.includes(el.link));\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/getNewPosts.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/addFeedCard.js":
-/*!****************************************!*\
-  !*** ./src/js/watchers/addFeedCard.js ***!
-  \****************************************/
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((element, header) => {\n  const card = document.createElement('div');\n  const cardBody = document.createElement('div');\n  const cardBodyHeader = document.createElement('h2');\n  const list = document.createElement('ul');\n  card.classList.add('card', 'border-0');\n  cardBody.classList.add('card-body');\n  cardBodyHeader.classList.add('card-title', 'h4');\n  list.classList.add('list-group', 'border-0', 'rounded-0');\n  cardBodyHeader.textContent = header;\n  cardBody.append(cardBodyHeader);\n  card.append(cardBody);\n  card.append(list);\n  element.append(card);\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/addFeedCard.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./styles.scss */ \"./src/styles.scss\");\n/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./main */ \"./src/main.js\");\n\n\n\n(0,_main__WEBPACK_IMPORTED_MODULE_1__[\"default\"])();\n\n\n//# sourceURL=webpack://@hexlet/code/./src/index.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/addItem.js":
-/*!************************************!*\
-  !*** ./src/js/watchers/addItem.js ***!
-  \************************************/
+/***/ "./src/locales/en.js":
+/*!***************************!*\
+  !*** ./src/locales/en.js ***!
+  \***************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, element, buttonText, cb) => {\n  const li = document.createElement('li');\n  const link = document.createElement('a');\n  const button = document.createElement('button');\n  li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');\n  link.classList.add('fw-bold');\n  link.setAttribute('target', '_blank');\n  link.setAttribute('href', state.link);\n  link.setAttribute('data-post-id', state.postID);\n  link.textContent = state.title;\n  button.classList.add('btn', 'btn-outline-primary', 'btn-sm');\n  button.setAttribute('type', 'button');\n  button.setAttribute('data-bs-toggle', 'modal');\n  button.setAttribute('data-post-id', state.postID);\n  button.textContent = buttonText;\n  button.addEventListener('click', (evt) => {\n    cb.call(null, evt, state);\n  });\n  li.append(link);\n  li.append(button);\n  element.append(li);\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/addItem.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({\n  translation: {\n    invalidUrl: 'The link should be a valid URL',\n  },\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/locales/en.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/addItemsList.js":
-/*!*****************************************!*\
-  !*** ./src/js/watchers/addItemsList.js ***!
-  \*****************************************/
+/***/ "./src/locales/index.js":
+/*!******************************!*\
+  !*** ./src/locales/index.js ***!
+  \******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((element, header) => {\n  const card = document.createElement('div');\n  const cardBody = document.createElement('div');\n  const cardHeader = document.createElement('h2');\n  const ul = document.createElement('ul');\n  card.classList.add('card', 'border-0');\n  cardBody.classList.add('card-body');\n  cardHeader.classList.add('card-title', 'h4');\n  ul.classList.add('list-group', 'border-0', 'rounded-0');\n  cardHeader.textContent = header;\n  cardBody.append(cardHeader);\n  card.append(cardBody);\n  card.append(ul);\n  element.append(card);\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/addItemsList.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _en__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./en */ \"./src/locales/en.js\");\n/* harmony import */ var _ru__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ru */ \"./src/locales/ru.js\");\n\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ ru: _ru__WEBPACK_IMPORTED_MODULE_1__[\"default\"], en: _en__WEBPACK_IMPORTED_MODULE_0__[\"default\"] });\n\n\n//# sourceURL=webpack://@hexlet/code/./src/locales/index.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/alertRSSloaded.js":
-/*!*******************************************!*\
-  !*** ./src/js/watchers/alertRSSloaded.js ***!
-  \*******************************************/
+/***/ "./src/locales/ru.js":
+/*!***************************!*\
+  !*** ./src/locales/ru.js ***!
+  \***************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((input, content) => {\n  input.classList.add('text-success');\n  input.classList.remove('text-danger');\n  input.textContent = content;\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/alertRSSloaded.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({\n  translation: {\n    RSSok: 'RSS успешно загружен',\n    invalidUrl: 'Ссылка должна быть валидным URL',\n    ERR_NETWORK: 'Ошибка сети',\n    noRSS: 'Ресурс не содержит валидный RSS',\n    blankInput: 'Не должно быть пустым',\n    feedsHeader: 'Фиды',\n    itemsHeader: 'Посты',\n    showItemButton: 'Просмотр',\n    RSSalreadyExists: 'RSS уже существует',\n    closeModal: 'Закрыть',\n    modalRead: 'Читать полностью',\n  },\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/locales/ru.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/hideDialogBlock.js":
-/*!********************************************!*\
-  !*** ./src/js/watchers/hideDialogBlock.js ***!
-  \********************************************/
+/***/ "./src/main.js":
+/*!*********************!*\
+  !*** ./src/main.js ***!
+  \*********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((element) => {\n  element.classList.remove('show');\n  element.style.display = 'none';\n  element.setAttribute('aria-hidden', 'true');\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/hideDialogBlock.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ \"./node_modules/axios/index.js\");\n/* harmony import */ var on_change__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! on-change */ \"./node_modules/on-change/index.js\");\n/* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! yup */ \"./node_modules/yup/es/index.js\");\n/* harmony import */ var i18next__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! i18next */ \"./node_modules/i18next/dist/esm/i18next.js\");\n/* harmony import */ var _locales_index__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./locales/index */ \"./src/locales/index.js\");\n/* harmony import */ var _watchers__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./watchers */ \"./src/watchers.js\");\n/* harmony import */ var _parser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./parser */ \"./src/parser.js\");\n/* harmony import */ var _feedIsAdded__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./feedIsAdded */ \"./src/feedIsAdded.js\");\n/* harmony import */ var _getNewPosts__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./getNewPosts */ \"./src/getNewPosts.js\");\n/* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! bootstrap */ \"./node_modules/bootstrap/dist/js/bootstrap.esm.js\");\n\n\n\n\n\n\n\n\n\n\n\nconst app = async () => {\n  const state = {\n    rssLink: {\n      value: '',\n      isValid: true,\n      error: '',\n    },\n    feeds: [],\n    posts: [],\n    watchedPosts: [],\n    postID: 0,\n    modal: 'hidden',\n  };\n  const input = document.querySelector('#url-input');\n  const feedback = document.querySelector('.feedback');\n  const i18nextInstance = i18next__WEBPACK_IMPORTED_MODULE_3__[\"default\"].createInstance();\n  const form = document.querySelector('.rss-form');\n  const feeds = document.querySelector('.feeds');\n  const posts = document.querySelector('.posts');\n  const { ru, en } = _locales_index__WEBPACK_IMPORTED_MODULE_4__[\"default\"];\n  i18nextInstance.init({\n    lng: 'ru',\n    debug: true,\n    resources: { en, ru },\n  }).then(() => {\n    const modal = document.querySelector('#modal');\n    modal.querySelectorAll('[data-bs-dismiss=\"modal\"]').forEach((el) => {\n      el.addEventListener('click', (evt) => {\n        evt.preventDefault();\n        state.modal = 'hidden';\n      });\n    });\n    const watchedState = (0,on_change__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(state, (path, value, previousValue) => {\n      const modalCallback = (evt, post) => {\n        evt.preventDefault();\n        watchedState.modal = post;\n      };\n      if (path === 'rssLink.RSSadded') {\n        _watchers__WEBPACK_IMPORTED_MODULE_5__[\"default\"].alertRSSloaded(feedback, value);\n      }\n      if (path === 'rssLink.isValid') {\n        _watchers__WEBPACK_IMPORTED_MODULE_5__[\"default\"].showHideError(state.rssLink.isValid, feedback, input, state.rssLink.error);\n      }\n      if (path === 'feeds') {\n        const feedListIsToBeAdded = previousValue.length === 0;\n        _watchers__WEBPACK_IMPORTED_MODULE_5__[\"default\"].addFeed(value[value.length - 1], feeds, feedListIsToBeAdded, i18nextInstance.t('feedsHeader'));\n      }\n      if (path === 'posts') {\n        const listIsToBeAdded = previousValue.length === 0;\n        _watchers__WEBPACK_IMPORTED_MODULE_5__[\"default\"].addItem(\n          value[value.length - 1],\n          posts,\n          i18nextInstance.t('showItemButton'),\n          modalCallback,\n          listIsToBeAdded,\n          i18nextInstance.t('itemsHeader'),\n        );\n      }\n      if (path === 'modal') {\n        _watchers__WEBPACK_IMPORTED_MODULE_5__[\"default\"].showDialogBlock(document.querySelector('#modal'), value);\n      }\n    });\n    const inputSchema = (0,yup__WEBPACK_IMPORTED_MODULE_2__.string)().required().url();\n    (0,yup__WEBPACK_IMPORTED_MODULE_2__.setLocale)({\n      string: {\n        url: i18next__WEBPACK_IMPORTED_MODULE_3__[\"default\"].t('invalidUrl'),\n      },\n    });\n    form.addEventListener('submit', (evt) => {\n      evt.preventDefault();\n      const url = input.value.trim();\n      if (url.length === 0) {\n        throw new Error(i18nextInstance.t('blankInput'));\n      }\n      inputSchema.isValid(url)\n        .then((val) => {\n          if (!val) {\n            state.rssLink.error = i18nextInstance.t('invalidUrl');\n            watchedState.rssLink.isValid = false;\n          } else {\n            state.rssLink.error = '';\n            watchedState.rssLink.isValid = true;\n          }\n        })\n        .then(() => {\n          if ((0,_feedIsAdded__WEBPACK_IMPORTED_MODULE_7__[\"default\"])(state, url)) {\n            state.rssLink.error = i18nextInstance.t('RSSalreadyExists');\n            watchedState.rssLink.isValid = false;\n            throw new Error(i18nextInstance('RSSalreadyExists'));\n          }\n          return new Promise((resolve, reject) => {\n            axios__WEBPACK_IMPORTED_MODULE_0__[\"default\"].get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`)\n              .then((result) => resolve(result))\n              .catch((e) => reject(e));\n          });\n        })\n        .then((res) => {\n          if (!res.data.status.content_type.includes('application/rss+xml')) {\n            throw new Error(i18nextInstance.t('noRSS'));\n          }\n          watchedState.rssLink.RSSadded = i18nextInstance.t('RSSok');\n          const { feedData, postsData } = (0,_parser__WEBPACK_IMPORTED_MODULE_6__[\"default\"])(res.data.contents, url);\n          if (!(0,_feedIsAdded__WEBPACK_IMPORTED_MODULE_7__[\"default\"])(state, url)) {\n            watchedState.feeds.push({\n              url,\n              title: feedData.title,\n              description: feedData.description,\n            });\n            postsData.forEach((post) => {\n              const newPost = post;\n              newPost.postID = state.postID;\n              watchedState.posts.push(post);\n              state.postID += 1;\n            });\n          }\n        })\n        .then(() => {\n          const makeReq = () => {\n            const promises = state.feeds.reduce((acc, feed) => {\n              acc.push(axios__WEBPACK_IMPORTED_MODULE_0__[\"default\"].get(`https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(feed.url)}`));\n              return acc;\n            }, []);\n            Promise.all(promises).then((res) => {\n              res.forEach((el) => {\n                const { postsData } = (0,_parser__WEBPACK_IMPORTED_MODULE_6__[\"default\"])(el.data.contents, el.data.status.url);\n                const newPosts = (0,_getNewPosts__WEBPACK_IMPORTED_MODULE_8__[\"default\"])(state.posts, postsData);\n                newPosts.forEach((newPost) => {\n                  const post = newPost;\n                  post.postID = state.postID;\n                  watchedState.posts.push(newPost);\n                  state.postID += 1;\n                });\n              });\n            });\n          };\n          const setInt = (fn, delay) => {\n            const wrapper = () => {\n              fn();\n              return setTimeout(wrapper, delay);\n            };\n            setTimeout(wrapper, delay);\n          };\n          setInt(makeReq, 5000);\n        })\n        .catch((e) => {\n          if (e.code === 'ERR_NETWORK') {\n            state.rssLink.error = i18nextInstance.t(e.code);\n          } else {\n            state.rssLink.error = e.message;\n          }\n          watchedState.rssLink.isValid = false;\n        });\n    });\n  });\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (app);\n\n\n//# sourceURL=webpack://@hexlet/code/./src/main.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/index.js":
-/*!**********************************!*\
-  !*** ./src/js/watchers/index.js ***!
-  \**********************************/
+/***/ "./src/parser.js":
+/*!***********************!*\
+  !*** ./src/parser.js ***!
+  \***********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _validateInput__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateInput */ \"./src/js/watchers/validateInput.js\");\n/* harmony import */ var _showHideError__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./showHideError */ \"./src/js/watchers/showHideError.js\");\n/* harmony import */ var _addFeedCard__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addFeedCard */ \"./src/js/watchers/addFeedCard.js\");\n/* harmony import */ var _addFeed__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./addFeed */ \"./src/js/watchers/addFeed.js\");\n/* harmony import */ var _addItemsList__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./addItemsList */ \"./src/js/watchers/addItemsList.js\");\n/* harmony import */ var _addItem__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./addItem */ \"./src/js/watchers/addItem.js\");\n/* harmony import */ var _showDialogBlock__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./showDialogBlock */ \"./src/js/watchers/showDialogBlock.js\");\n/* harmony import */ var _hideDialogBlock__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./hideDialogBlock */ \"./src/js/watchers/hideDialogBlock.js\");\n/* harmony import */ var _markPostWatched__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./markPostWatched */ \"./src/js/watchers/markPostWatched.js\");\n/* harmony import */ var _alertRSSloaded__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./alertRSSloaded */ \"./src/js/watchers/alertRSSloaded.js\");\n\n\n\n\n\n\n\n\n\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({\n  addRedBorderToInput: _validateInput__WEBPACK_IMPORTED_MODULE_0__[\"default\"],\n  showHideError: _showHideError__WEBPACK_IMPORTED_MODULE_1__[\"default\"],\n  addFeedCard: _addFeedCard__WEBPACK_IMPORTED_MODULE_2__[\"default\"],\n  addFeed: _addFeed__WEBPACK_IMPORTED_MODULE_3__[\"default\"],\n  addItemsList: _addItemsList__WEBPACK_IMPORTED_MODULE_4__[\"default\"],\n  addItem: _addItem__WEBPACK_IMPORTED_MODULE_5__[\"default\"],\n  showDialogBlock: _showDialogBlock__WEBPACK_IMPORTED_MODULE_6__[\"default\"],\n  hideDialogBlock: _hideDialogBlock__WEBPACK_IMPORTED_MODULE_7__[\"default\"],\n  markPostWatched: _markPostWatched__WEBPACK_IMPORTED_MODULE_8__[\"default\"],\n  alertRSSloaded: _alertRSSloaded__WEBPACK_IMPORTED_MODULE_9__[\"default\"],\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((data, url) => {\n  const domParser = new DOMParser();\n  const parsedData = domParser.parseFromString(data, 'text/html');\n  const feedParser = (html) => {\n    const title = html.querySelector('title').textContent;\n    const description = html.querySelector('description').innerHTML;\n    return { title, description };\n  };\n  const postsParser = (html, feedUrl) => {\n    const items = Array.from(html.querySelectorAll('item'))\n      .map((item) => {\n        const itemTitle = item.querySelector('title').textContent;\n        const itemLink = item.querySelector('guid').textContent;\n        const description = item.querySelector('description').innerHTML;\n        return {\n          url: feedUrl,\n          title: itemTitle,\n          link: itemLink,\n          description,\n          watched: false,\n        };\n      });\n    return items;\n  };\n  return {\n    feedData: feedParser(parsedData),\n    postsData: postsParser(parsedData, url),\n  };\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/parser.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/markPostWatched.js":
-/*!********************************************!*\
-  !*** ./src/js/watchers/markPostWatched.js ***!
-  \********************************************/
+/***/ "./src/showDialogBlock.js":
+/*!********************************!*\
+  !*** ./src/showDialogBlock.js ***!
+  \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((post) => {\n  post.classList.remove('fw-bold');\n  post.classList.add('fw-normal');\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/markPostWatched.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((element, post) => {\n  const postEl = document.querySelector(`[data-post-id=\"${post.postID}\"]`);\n  postEl.classList.remove('fw-bold');\n  postEl.classList.add('fw-normal');\n\n  const modalTitle = element.querySelector('.modal-title');\n  const modalBody = element.querySelector('.modal-body');\n  modalTitle.textContent = post.title;\n  modalBody.textContent = post.description;\n  element.querySelector('a.btn-primary').setAttribute('href', post.link);\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/showDialogBlock.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/showDialogBlock.js":
-/*!********************************************!*\
-  !*** ./src/js/watchers/showDialogBlock.js ***!
-  \********************************************/
+/***/ "./src/showHideError.js":
+/*!******************************!*\
+  !*** ./src/showHideError.js ***!
+  \******************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((element, post) => {\n  element.querySelector('.modal-title').textContent = post.title;\n  element.querySelector('.modal-body').textContent = post.description;\n  element.querySelector('a.btn-primary').setAttribute('href', post.link);\n  element.classList.add('show');\n  element.style.display = 'block';\n  element.removeAttribute('aria-hidden');\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/showDialogBlock.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, element, inputEl, content) => {\n  const newEl = element;\n  if (state === false) {\n    newEl.classList.add('text-danger');\n    inputEl.classList.add('is-invalid');\n    newEl.textContent = content;\n  } else {\n    newEl.textContent = ' ';\n    inputEl.classList.remove('is-invalid');\n  }\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/showHideError.js?");
 
 /***/ }),
 
-/***/ "./src/js/watchers/showHideError.js":
-/*!******************************************!*\
-  !*** ./src/js/watchers/showHideError.js ***!
-  \******************************************/
+/***/ "./src/watchers.js":
+/*!*************************!*\
+  !*** ./src/watchers.js ***!
+  \*************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, element, content) => {\n  if (state === false) {\n    element.classList.add('text-danger');\n    element.textContent = content;\n  } else {\n    element.textContent = ' ';\n  }\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/showHideError.js?");
-
-/***/ }),
-
-/***/ "./src/js/watchers/validateInput.js":
-/*!******************************************!*\
-  !*** ./src/js/watchers/validateInput.js ***!
-  \******************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((state, input) => {\n  if (state === false) {\n    input.classList.add('is-invalid');\n  } else {\n    input.classList.remove('is-invalid');\n  }\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/js/watchers/validateInput.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _showHideError__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./showHideError */ \"./src/showHideError.js\");\n/* harmony import */ var _addFeed__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./addFeed */ \"./src/addFeed.js\");\n/* harmony import */ var _addItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./addItem */ \"./src/addItem.js\");\n/* harmony import */ var _showDialogBlock__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./showDialogBlock */ \"./src/showDialogBlock.js\");\n/* harmony import */ var _alertRSSloaded__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./alertRSSloaded */ \"./src/alertRSSloaded.js\");\n\n\n\n\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({\n  showHideError: _showHideError__WEBPACK_IMPORTED_MODULE_0__[\"default\"],\n  addFeed: _addFeed__WEBPACK_IMPORTED_MODULE_1__[\"default\"],\n  addItem: _addItem__WEBPACK_IMPORTED_MODULE_2__[\"default\"],\n  showDialogBlock: _showDialogBlock__WEBPACK_IMPORTED_MODULE_3__[\"default\"],\n  alertRSSloaded: _alertRSSloaded__WEBPACK_IMPORTED_MODULE_4__[\"default\"],\n});\n\n\n//# sourceURL=webpack://@hexlet/code/./src/watchers.js?");
 
 /***/ }),
 
@@ -3689,7 +3623,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/js/main.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
 /******/ 	
 /******/ })()
 ;
