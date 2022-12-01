@@ -11,5 +11,6 @@ export default {
     RSSalreadyExists: 'RSS уже существует',
     closeModal: 'Закрыть',
     modalRead: 'Читать полностью',
+    parserError: 'Не удалось распарсить данные. Возможно, данные приходят в неправильном формате',
   },
 };
