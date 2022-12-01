@@ -14,7 +14,7 @@ const addItemsList = (element, header) => {
   element.append(card);
 };
 
-export default (state, element, buttonText, listIsToBeAdded, itemsHeader, watchedState) => {
+export default (state, element, buttonText, listIsToBeAdded, itemsHeader) => {
   if (listIsToBeAdded) {
     addItemsList(element, itemsHeader);
   }
@@ -34,11 +34,6 @@ export default (state, element, buttonText, listIsToBeAdded, itemsHeader, watche
   button.setAttribute('data-bs-target', '#modal');
   button.setAttribute('data-post-id', state.postID);
   button.textContent = buttonText;
-  button.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    const newState = watchedState;
-    newState.modal = state;
-  });
   li.append(link);
   li.append(button);
   itemsList.append(li);

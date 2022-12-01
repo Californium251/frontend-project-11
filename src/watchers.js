@@ -30,11 +30,9 @@ export default (state, i18nextInstance, feeds, posts, feedback, input) => {
         i18nextInstance.t('showItemButton'),
         listIsToBeAdded,
         i18nextInstance.t('itemsHeader'),
-        watchedState,
       );
     }
     if (path === 'modal') {
-      console.log(value);
       showDialogBlock(document.querySelector('#modal'), value);
     }
   });

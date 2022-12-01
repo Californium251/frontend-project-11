@@ -41,6 +41,14 @@ const app = async () => {
         url: i18next.t('invalidUrl'),
       },
     });
+    posts.addEventListener('click', (evt) => {
+      if (evt.target.getAttribute('data-bs-toggle') === 'modal') {
+        evt.preventDefault();
+        const id = evt.target.previousSibling.getAttribute('data-post-id');
+        const post = watchedState.posts.filter((el) => el.postID === +id)[0];
+        watchedState.modal = post;
+      }
+    });
     form.addEventListener('submit', (evt) => {
       evt.preventDefault();
       const url = input.value.trim();
