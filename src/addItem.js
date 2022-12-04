@@ -12,13 +12,11 @@ const addItemsList = (element, header) => {
   card.append(cardBody);
   card.append(ul);
   element.append(card);
+  return ul;
 };
 
-export default (state, element, buttonText, listIsToBeAdded, itemsHeader) => {
-  if (listIsToBeAdded) {
-    addItemsList(element, itemsHeader);
-  }
-  const itemsList = element.querySelector('.list-group');
+export default (state, element, buttonText, itemsHeader) => {
+  const itemsList = element.querySelector('.list-group') || addItemsList(element, itemsHeader);
   const li = document.createElement('li');
   const link = document.createElement('a');
   const button = document.createElement('button');

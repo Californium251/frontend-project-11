@@ -8,14 +8,14 @@ import alertRSSloaded from './alertRSSloaded';
 export default (state, i18nextInstance, feeds, posts, feedback, input) => {
   const watchedState = onChange(state, (path, value, previousValue) => {
     if (path === 'rssLink.RSSadded') {
-      alertRSSloaded(feedback, value);
+      alertRSSloaded(feedback, i18nextInstance.t('RSSok'));
     }
     if (path === 'rssLink.isValid') {
       showHideError(
         watchedState.rssLink.isValid,
         feedback,
         input,
-        watchedState.rssLink.error,
+        i18nextInstance.t(watchedState.rssLink.error),
       );
     }
     if (path === 'feeds') {
@@ -23,12 +23,10 @@ export default (state, i18nextInstance, feeds, posts, feedback, input) => {
       addFeed(value[value.length - 1], feeds, feedListIsToBeAdded, i18nextInstance.t('feedsHeader'));
     }
     if (path === 'posts') {
-      const listIsToBeAdded = previousValue.length === 0;
       addItem(
         value[value.length - 1],
         posts,
         i18nextInstance.t('showItemButton'),
-        listIsToBeAdded,
         i18nextInstance.t('itemsHeader'),
       );
     }
