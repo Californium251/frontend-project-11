@@ -31,7 +31,8 @@ export default (state, i18nextInstance, feeds, posts, feedback, input) => {
       );
     }
     if (path === 'modal') {
-      showDialogBlock(document.querySelector('#modal'), value);
+      const targetPost = watchedState.posts.filter((post) => post.postID === value)[0];
+      showDialogBlock(document.querySelector('#modal'), targetPost);
     }
   });
   return watchedState;

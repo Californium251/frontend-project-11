@@ -18,13 +18,14 @@ export default (data) => {
           description,
         };
       });
-    return {
+    const result = {
       feedData: {
         title: parsedData.querySelector('title').textContent,
         description: parsedData.querySelector('description').innerHTML,
       },
       postsData: items,
     };
+    return result;
   } catch (e) {
     e.isParsingError = true;
     throw e;
