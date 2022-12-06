@@ -107,17 +107,17 @@ const app = async () => {
           return getPosts(watchedState, url, getAllOriginsUrl);
         })
         .catch((e) => {
-          const getErrorCode = (e) => {
-            if (e.name === 'ValidationError') {
+          const getErrorCode = (error) => {
+            if (error.name === 'ValidationError') {
               return 'invalidUrl';
             }
-            if (e.code === 'ERR_NETWORK') {
+            if (error.code === 'ERR_NETWORK') {
               return 'ERR_NETWORK';
             }
-            if (e.isParsingError) {
+            if (error.isParsingError) {
               return 'parserError';
             }
-            if (e.isAxiosError) {
+            if (error.isAxiosError) {
               return 'network';
             }
             return 'unknown';
