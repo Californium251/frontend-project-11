@@ -3,7 +3,7 @@ export default {
     RSSok: 'RSS успешно загружен',
     invalidUrl: 'Ссылка должна быть валидным URL',
     inputRequired: 'Укажите адресс RSS',
-    ERR_NETWORK: 'Ошибка сети',
+    AxiosError: 'Ошибка сети',
     noRSS: 'Ресурс не содержит валидный RSS',
     feedsHeader: 'Фиды',
     itemsHeader: 'Посты',
@@ -12,6 +12,7 @@ export default {
     closeModal: 'Закрыть',
     modalRead: 'Читать полностью',
     parserError: 'Не удалось распарсить данные. Возможно, данные приходят в неправильном формате',
+    required: 'Поле не может быть пустым',
     unknown: 'Неизвестная ошибка',
   },
 };

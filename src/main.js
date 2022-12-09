@@ -7,25 +7,40 @@ import watchers from './watchers';
 import parser from './parser';
 import 'bootstrap';
 
-const getPosts = (state, url, getUrlFunc) => axios.get(getUrlFunc(url)).then((res) => {
-  const watchedState = state;
-  watchedState.rssLink.RSSadded = true;
-  const { feedData, postsData } = parser(res.data.contents);
-  const feedId = _.uniqueId('feed-');
-  watchedState.feedUrls.push(url);
-  watchedState.feeds.push({
-    url,
-    title: feedData.title,
-    description: feedData.description,
-    feedID: feedId,
+const getPosts = (state, url, getUrlFunc, i18nextInstance) => axios
+  .get(getUrlFunc(url))
+  .then((res) => {
+    const watchedState = state;
+    watchedState.rssLink.RSSadded = true;
+    const { feedData, postsData } = parser(res.data.contents);
+    const feedId = _.uniqueId('feed-');
+    watchedState.feeds.push({
+      url,
+      title: feedData.title,
+      description: feedData.description,
+      feedID: feedId,
+    });
+    postsData.forEach((post) => {
+      const newPost = post;
+      newPost.postID = _.uniqueId('post-');
+      newPost.feedID = feedId;
+      watchedState.posts.push(post);
+    });
+  })
+  .catch((e) => {
+    const getErrorCode = (err) => {
+      if (err.isParsingError) {
+        return 'parserError';
+      }
+      if (e.name === 'AxiosError') {
+        return e.name;
+      }
+      return 'unkown';
+    };
+    const watchedState = state;
+    watchedState.rssLink.error = i18nextInstance.t(getErrorCode(e));
+    watchedState.rssLink.isValid = false;
   });
-  postsData.forEach((post) => {
-    const newPost = post;
-    newPost.postID = _.uniqueId('post-');
-    newPost.feedID = feedId;
-    watchedState.posts.push(post);
-  });
-});
 
 const getUpdates = (watchedState, getAllOriginsUrl, i18nextInstance) => () => {
   const promises = watchedState.feeds.reduce((acc, feed) => {
@@ -48,7 +63,7 @@ const getUpdates = (watchedState, getAllOriginsUrl, i18nextInstance) => () => {
         watchedState.posts.push(newPost);
       });
     });
-  });
+  }).then(() => setTimeout(getUpdates(watchedState, getAllOriginsUrl, i18nextInstance), 5000));
 };
 
 const app = async () => {
@@ -57,19 +72,21 @@ const app = async () => {
       value: '',
       isValid: true,
       error: '',
+      RSSadded: false,
     },
     feeds: [],
-    feedUrls: [],
     posts: [],
     watchedPosts: [],
     modal: null,
   };
-  const input = document.querySelector('#url-input');
-  const feedback = document.querySelector('.feedback');
+  const elements = {
+    input: document.querySelector('#url-input'),
+    feedback: document.querySelector('.feedback'),
+    form: document.querySelector('.rss-form'),
+    feeds: document.querySelector('.feeds'),
+    posts: document.querySelector('.posts'),
+  };
   const i18nextInstance = i18next.createInstance();
-  const form = document.querySelector('.rss-form');
-  const feeds = document.querySelector('.feeds');
-  const posts = document.querySelector('.posts');
   const { ru, en } = resources;
   const getAllOriginsUrl = (url) => `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
   i18nextInstance.init({
@@ -77,48 +94,52 @@ const app = async () => {
     debug: true,
     resources: { en, ru },
   }).then(() => {
-    const watchedState = watchers(initialState, i18nextInstance, feeds, posts, feedback, input);
-    const inputSchema = yup
-      .string()
-      .required()
-      .url()
-      .notOneOf(watchedState.feeds.map((feed) => feed.url));
+    const watchedState = watchers(
+      initialState,
+      i18nextInstance,
+      elements.feeds,
+      elements.posts,
+      elements.feedback,
+      elements.input,
+    );
     yup.setLocale({
       string: {
-        url: i18nextInstance.t('invalidUrl'),
-        required: i18nextInstance.t('inputRequired'),
+        url: i18nextInstance.t('RSSalreadyExists'),
+      },
+      mixed: {
+        required: i18nextInstance.t('required'),
         notOneOf: i18nextInstance.t('RSSalreadyExists'),
       },
     });
-    posts.addEventListener('click', (evt) => {
+    const inputSchema = yup
+      .string()
+      .required()
+      .url();
+    const validateUrl = (url, feedsArr) => {
+      const feedUrls = feedsArr.map((feed) => feed.url);
+      const actualUrlSchema = inputSchema.notOneOf(feedUrls);
+      return actualUrlSchema.validate(url);
+    };
+    elements.posts.addEventListener('click', (evt) => {
       const id = evt.target.getAttribute('data-post-id') || null;
       if (!id) {
         return;
       }
       watchedState.modal = id;
     });
-    form.addEventListener('submit', (evt) => {
+    elements.form.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      const url = input.value.trim();
-      inputSchema.validate(url)
+      const url = elements.input.value.trim();
+      validateUrl(url, watchedState.feeds)
         .then(() => {
           watchedState.rssLink.error = '';
           watchedState.rssLink.isValid = true;
-          return getPosts(watchedState, url, getAllOriginsUrl);
+          return getPosts(watchedState, url, getAllOriginsUrl, i18nextInstance);
         })
         .catch((e) => {
           const getErrorCode = (error) => {
             if (error.name === 'ValidationError') {
-              return 'invalidUrl';
-            }
-            if (error.code === 'ERR_NETWORK') {
-              return 'ERR_NETWORK';
-            }
-            if (error.isParsingError) {
-              return 'parserError';
-            }
-            if (error.isAxiosError) {
-              return 'network';
+              return error.message;
             }
             return 'unknown';
           };
@@ -126,14 +147,7 @@ const app = async () => {
           watchedState.rssLink.isValid = false;
         });
     });
-    const setInt = (fn, delay) => {
-      const wrapper = () => {
-        fn();
-        return setTimeout(wrapper, delay);
-      };
-      setTimeout(wrapper, delay);
-    };
-    setInt(getUpdates(watchedState, getAllOriginsUrl, i18nextInstance), 5000);
+    getUpdates(watchedState, getAllOriginsUrl, i18nextInstance)();
   });
 };
 
