@@ -15,24 +15,33 @@ const addItemsList = (element, header) => {
   return ul;
 };
 
-export default (state, element, buttonText, itemsHeader) => {
-  const itemsList = element.querySelector('.list-group') || addItemsList(element, itemsHeader);
+const addItem = (post, element, buttonText, itemsList) => {
   const li = document.createElement('li');
   const link = document.createElement('a');
   const button = document.createElement('button');
   li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-  link.classList.add('fw-bold');
+  if (post.isWatched) {
+    link.classList.add('fw-normal');
+  } else {
+    link.classList.add('fw-bold');
+  }
   link.setAttribute('target', '_blank');
-  link.setAttribute('href', state.link);
-  link.setAttribute('data-post-id', state.postID);
-  link.textContent = state.title;
+  link.setAttribute('href', post.link);
+  link.setAttribute('data-post-id', post.postID);
+  link.textContent = post.title;
   button.classList.add('btn', 'btn-outline-primary', 'btn-sm');
   button.setAttribute('type', 'button');
   button.setAttribute('data-bs-toggle', 'modal');
   button.setAttribute('data-bs-target', '#modal');
-  button.setAttribute('data-post-id', state.postID);
+  button.setAttribute('data-post-id', post.postID);
   button.textContent = buttonText;
   li.append(link);
   li.append(button);
   itemsList.append(li);
+};
+
+export default (posts, element, buttonText, itemsHeader) => {
+  const itemsList = element.querySelector('.list-group') || addItemsList(element, itemsHeader);
+  itemsList.innerHTML = '';
+  posts.forEach((post) => addItem(post, element, buttonText, itemsList));
 };

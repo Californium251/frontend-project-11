@@ -7,63 +7,63 @@ import watchers from './watchers';
 import parser from './parser';
 import 'bootstrap';
 
-const getPosts = (state, url, getUrlFunc, i18nextInstance) => axios
+const getPosts = (watchedState, url, getUrlFunc, i18nextInstance) => axios
   .get(getUrlFunc(url))
   .then((res) => {
-    const watchedState = state;
     watchedState.rssLink.RSSadded = true;
     const { feedData, postsData } = parser(res.data.contents);
     const feedId = _.uniqueId('feed-');
-    watchedState.feeds.push({
+    watchedState.feeds = [...watchedState.feeds, {
       url,
       title: feedData.title,
       description: feedData.description,
       feedID: feedId,
+    }];
+    const posts = postsData.map((post) => {
+      post.postID = _.uniqueId('post-');
+      post.feedID = feedId;
+      post.isWatched = false;
+      return post;
     });
-    postsData.forEach((post) => {
-      const newPost = post;
-      newPost.postID = _.uniqueId('post-');
-      newPost.feedID = feedId;
-      watchedState.posts.push(post);
-    });
+    watchedState.posts = [...watchedState.posts, ...posts];
   })
   .catch((e) => {
     const getErrorCode = (err) => {
       if (err.isParsingError) {
         return 'parserError';
       }
-      if (e.name === 'AxiosError') {
-        return e.name;
+      if (axios.isAxiosError(err)) {
+        return err.name;
       }
-      return 'unkown';
+      return 'unknown';
     };
-    const watchedState = state;
     watchedState.rssLink.error = i18nextInstance.t(getErrorCode(e));
     watchedState.rssLink.isValid = false;
   });
 
-const getUpdates = (watchedState, getAllOriginsUrl, i18nextInstance) => () => {
-  const promises = watchedState.feeds.reduce((acc, feed) => {
-    acc.push(axios.get(getAllOriginsUrl(feed.url)));
-    return acc;
-  }, []);
-  Promise.all(promises).then((res) => {
-    res.forEach((el) => {
-      const { postsData } = parser(el.data.contents, i18nextInstance.t('parserError'));
+const getUpdates = (watchedState, getAllOriginsUrl, i18nextInstance) => {
+  const requestUpdates = () => {
+    watchedState.feeds.reduce((acc, feed) => {
+      acc.push(axios.get(getAllOriginsUrl(feed.url)));
+      return acc;
+    }, []).map((promise) => promise.then((res) => {
+      const { postsData } = parser(res.data.contents, i18nextInstance.t('parserError'));
       const getNewPosts = (state, postsArr) => {
         const flatState = state.map((postEl) => postEl.link);
         return postsArr.filter((postEl) => !flatState.includes(postEl.link));
       };
-      const newPosts = getNewPosts(watchedState.posts, postsData);
       const feedId = _.uniqueId('feed-');
-      newPosts.forEach((newPost) => {
-        const post = newPost;
+      const newPosts = getNewPosts(watchedState.posts, postsData).map((post) => {
         post.postID = _.uniqueId('post-');
         post.feedID = feedId;
-        watchedState.posts.push(newPost);
+        post.isWatched = false;
+        return post;
       });
-    });
-  }).then(() => setTimeout(getUpdates(watchedState, getAllOriginsUrl, i18nextInstance), 5000));
+      watchedState.posts = [...watchedState.posts, ...newPosts];
+    }));
+    setTimeout(requestUpdates, 5000);
+  };
+  setTimeout(requestUpdates, 5000);
 };
 
 const app = async () => {
@@ -85,6 +85,7 @@ const app = async () => {
     form: document.querySelector('.rss-form'),
     feeds: document.querySelector('.feeds'),
     posts: document.querySelector('.posts'),
+    modal: document.querySelector('#modal'),
   };
   const i18nextInstance = i18next.createInstance();
   const { ru, en } = resources;
@@ -97,18 +98,15 @@ const app = async () => {
     const watchedState = watchers(
       initialState,
       i18nextInstance,
-      elements.feeds,
-      elements.posts,
-      elements.feedback,
-      elements.input,
+      elements,
     );
     yup.setLocale({
       string: {
-        url: i18nextInstance.t('RSSalreadyExists'),
+        url: 'invalidUrl',
       },
       mixed: {
-        required: i18nextInstance.t('required'),
-        notOneOf: i18nextInstance.t('RSSalreadyExists'),
+        required: 'required',
+        notOneOf: 'RSSalreadyExists',
       },
     });
     const inputSchema = yup
@@ -147,7 +145,7 @@ const app = async () => {
           watchedState.rssLink.isValid = false;
         });
     });
-    getUpdates(watchedState, getAllOriginsUrl, i18nextInstance)();
+    getUpdates(watchedState, getAllOriginsUrl, i18nextInstance);
   });
 };
 

@@ -1,7 +1,7 @@
 export default (state, input) => {
-  if (state === false) {
-    input.classList.add('is-invalid');
-  } else {
+  if (state) {
     input.classList.remove('is-invalid');
+  } else {
+    input.classList.add('is-invalid');
   }
 };

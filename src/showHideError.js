@@ -1,11 +1,10 @@
 export default (state, element, inputEl, content) => {
-  const newEl = element;
   if (state === false) {
-    newEl.classList.add('text-danger');
+    element.classList.add('text-danger');
     inputEl.classList.add('is-invalid');
-    newEl.textContent = content;
+    element.textContent = content;
   } else {
-    newEl.textContent = ' ';
+    element.textContent = ' ';
     inputEl.classList.remove('is-invalid');
   }
 };
