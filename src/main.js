@@ -7,8 +7,9 @@ import watchers from './watchers';
 import parser from './parser';
 import 'bootstrap';
 
-const getPosts = (watchedState, url, getUrlFunc, i18nextInstance) => axios
-  .get(getUrlFunc(url))
+const addProxy = (url) => `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
+const getPosts = (watchedState, url) => axios
+  .get(addProxy(url))
   .then((res) => {
     watchedState.rssLink.RSSadded = true;
     const { feedData, postsData } = parser(res.data.contents);
@@ -22,9 +23,10 @@ const getPosts = (watchedState, url, getUrlFunc, i18nextInstance) => axios
     const posts = postsData.map((post) => {
       post.postID = _.uniqueId('post-');
       post.feedID = feedId;
-      post.isWatched = false;
       return post;
     });
+    const UIposts = posts.map((post) => ({ postID: post.postID, watched: false }));
+    watchedState.UIstate.posts = [...watchedState.UIstate.posts, ...UIposts];
     watchedState.posts = [...watchedState.posts, ...posts];
   })
   .catch((e) => {
@@ -37,17 +39,14 @@ const getPosts = (watchedState, url, getUrlFunc, i18nextInstance) => axios
       }
       return 'unknown';
     };
-    watchedState.rssLink.error = i18nextInstance.t(getErrorCode(e));
-    watchedState.rssLink.isValid = false;
+    watchedState.rssLink.error = getErrorCode(e);
   });
 
-const getUpdates = (watchedState, getAllOriginsUrl, i18nextInstance) => {
+const getUpdates = (watchedState) => {
   const requestUpdates = () => {
-    watchedState.feeds.reduce((acc, feed) => {
-      acc.push(axios.get(getAllOriginsUrl(feed.url)));
-      return acc;
-    }, []).map((promise) => promise.then((res) => {
-      const { postsData } = parser(res.data.contents, i18nextInstance.t('parserError'));
+    const promises = watchedState.feeds.map((feed) => axios.get(addProxy(feed.url)));
+    const requests = promises.map((promise) => promise.then((res) => {
+      const { postsData } = parser(res.data.contents);
       const getNewPosts = (state, postsArr) => {
         const flatState = state.map((postEl) => postEl.link);
         return postsArr.filter((postEl) => !flatState.includes(postEl.link));
@@ -56,14 +55,15 @@ const getUpdates = (watchedState, getAllOriginsUrl, i18nextInstance) => {
       const newPosts = getNewPosts(watchedState.posts, postsData).map((post) => {
         post.postID = _.uniqueId('post-');
         post.feedID = feedId;
-        post.isWatched = false;
         return post;
       });
+      const UIposts = newPosts.map((post) => ({ postID: post.postID, watched: false }));
+      watchedState.UIposts = [...watchedState.UIposts, ...UIposts];
       watchedState.posts = [...watchedState.posts, ...newPosts];
     }));
-    setTimeout(requestUpdates, 5000);
+    Promise.all(requests).finally(() => setTimeout(requestUpdates, 5000));
   };
-  setTimeout(requestUpdates, 5000);
+  requestUpdates();
 };
 
 const app = async () => {
@@ -73,6 +73,9 @@ const app = async () => {
       isValid: true,
       error: '',
       RSSadded: false,
+    },
+    UIstate: {
+      posts: [],
     },
     feeds: [],
     posts: [],
@@ -88,12 +91,10 @@ const app = async () => {
     modal: document.querySelector('#modal'),
   };
   const i18nextInstance = i18next.createInstance();
-  const { ru, en } = resources;
-  const getAllOriginsUrl = (url) => `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
   i18nextInstance.init({
     lng: 'ru',
     debug: true,
-    resources: { en, ru },
+    resources,
   }).then(() => {
     const watchedState = watchers(
       initialState,
@@ -132,7 +133,7 @@ const app = async () => {
         .then(() => {
           watchedState.rssLink.error = '';
           watchedState.rssLink.isValid = true;
-          return getPosts(watchedState, url, getAllOriginsUrl, i18nextInstance);
+          return getPosts(watchedState, url);
         })
         .catch((e) => {
           const getErrorCode = (error) => {
@@ -145,7 +146,7 @@ const app = async () => {
           watchedState.rssLink.isValid = false;
         });
     });
-    getUpdates(watchedState, getAllOriginsUrl, i18nextInstance);
+    getUpdates(watchedState);
   });
 };
 

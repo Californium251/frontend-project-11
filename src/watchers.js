@@ -1,36 +1,43 @@
 import onChange from 'on-change';
-import showHideError from './showHideError';
-import addFeeds from './addFeeds';
-import addItems from './addItems';
-import showDialogBlock from './showDialogBlock';
-import alertRSSloaded from './alertRSSloaded';
+import renderError from './renderError';
+import renderFeeds from './renderFeeds';
+import renderItems from './renderItems';
+import renderModal from './renderModal';
+import renderRSSloaded from './renderRSSloaded';
+import renderValidationErr from './renderValidationErr';
 import markPostWatched from './markPostWatched';
 
 export default (state, i18nextInstance, elements) => {
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
-      case 'rssLink.isValid':
-        showHideError(
-          watchedState.rssLink.isValid,
+      case 'rssLink.error':
+        renderError(
           elements.feedback,
           elements.input,
-          i18nextInstance.t(watchedState.rssLink.error),
+          watchedState.rssLink.error,
+          i18nextInstance,
         );
+        break;
+      case 'rssLink.isValid':
+        renderValidationErr(watchedState.rssLink.isValid, elements.input);
         break;
       case 'feeds':
-        addFeeds(
+        renderFeeds(
           value,
           elements.feeds,
-          i18nextInstance.t('feedsHeader'),
+          'feedsHeader',
+          i18nextInstance,
         );
-        alertRSSloaded(elements.feedback, i18nextInstance.t('RSSok'));
+        renderRSSloaded(elements.feedback, 'RSSok', i18nextInstance);
         break;
       case 'posts':
-        addItems(
+        renderItems(
           value,
           elements.posts,
-          i18nextInstance.t('showItemButton'),
-          i18nextInstance.t('itemsHeader'),
+          watchedState.UIstate.posts,
+          'showItemButton',
+          'itemsHeader',
+          i18nextInstance,
         );
         break;
       default:
@@ -38,9 +45,9 @@ export default (state, i18nextInstance, elements) => {
     }
     if (path === 'modal') {
       const targetPost = watchedState.posts.filter((post) => post.postID === value)[0];
-      targetPost.isWatched = true;
-      markPostWatched(targetPost);
-      showDialogBlock(elements.modal, targetPost);
+      watchedState.UIstate.posts.filter((post) => post.postID === value)[0].watched = true;
+      markPostWatched(value);
+      renderModal(elements.modal, targetPost);
     }
   });
   return watchedState;

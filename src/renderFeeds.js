@@ -1,4 +1,4 @@
-const addFeedList = (element, header) => {
+const addFeedList = (element, header, i18nextInstance) => {
   const card = document.createElement('div');
   const cardBody = document.createElement('div');
   const cardBodyHeader = document.createElement('h2');
@@ -7,7 +7,7 @@ const addFeedList = (element, header) => {
   cardBody.classList.add('card-body');
   cardBodyHeader.classList.add('card-title', 'h4');
   list.classList.add('list-group', 'border-0', 'rounded-0');
-  cardBodyHeader.textContent = header;
+  cardBodyHeader.textContent = i18nextInstance.t(header);
   cardBody.append(cardBodyHeader);
   card.append(cardBody);
   card.append(list);
@@ -29,8 +29,8 @@ const addFeed = (feed, feedList) => {
   feedList.append(li);
 };
 
-export default (feeds, element, feedsHeader) => {
-  const feedList = element.querySelector('.list-group') || addFeedList(element, feedsHeader);
+export default (feeds, element, feedsHeader, i18nextInstance) => {
+  const feedList = element.querySelector('.list-group') || addFeedList(element, feedsHeader, i18nextInstance);
   feedList.innerHTML = '';
   feeds.forEach((feed) => addFeed(feed, feedList));
 };
