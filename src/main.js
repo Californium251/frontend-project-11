@@ -40,6 +40,9 @@ const getPosts = (watchedState, url) => axios
       return 'unknown';
     };
     watchedState.rssLink.error = getErrorCode(e);
+  })
+  .finally(() => {
+    watchedState.feedsTemp = [];
   });
 
 const getUpdates = (watchedState) => {
@@ -77,6 +80,7 @@ const app = async () => {
       posts: [],
     },
     feeds: [],
+    feedsTemp: [],
     posts: [],
     watchedPosts: [],
     modal: null,
@@ -113,9 +117,9 @@ const app = async () => {
       .string()
       .required()
       .url();
-    const validateUrl = (url, feedsArr) => {
+    const validateUrl = (url, feedsArr, feedsTemp) => {
       const feedUrls = feedsArr.map((feed) => feed.url);
-      const actualUrlSchema = inputSchema.notOneOf(feedUrls);
+      const actualUrlSchema = inputSchema.notOneOf(feedUrls).notOneOf(feedsTemp);
       return actualUrlSchema.validate(url);
     };
     elements.posts.addEventListener('click', (evt) => {
@@ -128,8 +132,9 @@ const app = async () => {
     elements.form.addEventListener('submit', (evt) => {
       evt.preventDefault();
       const url = elements.input.value.trim();
-      validateUrl(url, watchedState.feeds)
+      validateUrl(url, watchedState.feeds, watchedState.feedsTemp)
         .then(() => {
+          watchedState.feedsTemp.push(url);
           watchedState.rssLink.error = '';
           watchedState.rssLink.isValid = true;
           return getPosts(watchedState, url);
