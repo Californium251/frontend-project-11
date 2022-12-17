@@ -44,8 +44,7 @@ const getPosts = (watchedState, url) => axios
 
 const getUpdates = (watchedState) => {
   const requestUpdates = () => {
-    const promises = watchedState.feeds.map((feed) => axios.get(addProxy(feed.url)));
-    const requests = promises.map((promise) => promise.then((res) => {
+    const promises = watchedState.feeds.map((feed) => axios.get(addProxy(feed.url)).then((res) => {
       const { postsData } = parser(res.data.contents);
       const getNewPosts = (state, postsArr) => {
         const flatState = state.map((postEl) => postEl.link);
@@ -60,8 +59,8 @@ const getUpdates = (watchedState) => {
       const UIposts = newPosts.map((post) => ({ postID: post.postID, watched: false }));
       watchedState.UIposts = [...watchedState.UIposts, ...UIposts];
       watchedState.posts = [...watchedState.posts, ...newPosts];
-    }));
-    Promise.all(requests).finally(() => setTimeout(requestUpdates, 5000));
+    }).catch(() => {}));
+    Promise.all(promises).finally(() => setTimeout(requestUpdates, 5000));
   };
   requestUpdates();
 };
