@@ -13,20 +13,18 @@ const getPosts = (watchedState, url) => axios
   .then((res) => {
     watchedState.rssLink.RSSadded = true;
     const { feedData, postsData } = parser(res.data.contents);
-    const feedId = _.uniqueId('feed-');
+    const feedID = _.uniqueId('feed-');
     watchedState.feeds = [...watchedState.feeds, {
       url,
       title: feedData.title,
       description: feedData.description,
-      feedID: feedId,
+      feedID,
     }];
     const posts = postsData.map((post) => {
       post.postID = _.uniqueId('post-');
-      post.feedID = feedId;
+      post.feedID = feedID;
       return post;
     });
-    const UIposts = posts.map((post) => ({ postID: post.postID, watched: false }));
-    watchedState.UIstate.posts = [...watchedState.UIstate.posts, ...UIposts];
     watchedState.posts = [...watchedState.posts, ...posts];
   })
   .catch((e) => {
@@ -46,30 +44,29 @@ const getPosts = (watchedState, url) => axios
   });
 
 const getUpdates = (watchedState) => {
-  const requestUpdates = () => {
-    const promises = watchedState.feeds.map((feed) => axios.get(addProxy(feed.url)).then((res) => {
-      const { postsData } = parser(res.data.contents);
-      const getNewPosts = (state, postsArr) => {
-        const flatState = state.map((postEl) => postEl.link);
-        return postsArr.filter((postEl) => !flatState.includes(postEl.link));
-      };
-      const feedId = _.uniqueId('feed-');
-      const newPosts = getNewPosts(watchedState.posts, postsData).map((post) => {
-        post.postID = _.uniqueId('post-');
-        post.feedID = feedId;
-        return post;
-      });
-      const UIposts = newPosts.map((post) => ({ postID: post.postID, watched: false }));
-      watchedState.UIposts = [...watchedState.UIposts, ...UIposts];
-      watchedState.posts = [...watchedState.posts, ...newPosts];
-    }).catch(() => {}));
-    Promise.all(promises).finally(() => setTimeout(requestUpdates, 5000));
-  };
-  requestUpdates();
+  const promises = watchedState.feeds.map((feed) => axios.get(addProxy(feed.url)).then((res) => {
+    const { postsData } = parser(res.data.contents);
+    const getNewPosts = (state, postsArr) => {
+      const flatState = state.map((postEl) => postEl.link);
+      return postsArr.filter((postEl) => !flatState.includes(postEl.link));
+    };
+    const newPosts = getNewPosts(watchedState.posts, postsData).map((post) => {
+      post.postID = _.uniqueId('post-');
+      post.feedID = feed.feedID;
+      return post;
+    });
+    watchedState.posts = [...watchedState.posts, ...newPosts];
+  }).catch((e) => {
+    console.log(e.message);
+  }));
+  Promise.all(promises).finally(() => setTimeout(() => {
+    getUpdates(watchedState);
+  }, 5000));
 };
 
 const app = async () => {
   const initialState = {
+    formState: 'ready',
     rssLink: {
       value: '',
       isValid: true,
@@ -82,11 +79,11 @@ const app = async () => {
     feeds: [],
     feedsTemp: [],
     posts: [],
-    watchedPosts: [],
     modal: null,
   };
   const elements = {
     input: document.querySelector('#url-input'),
+    submitButton: document.querySelector('button[type="submit"]'),
     feedback: document.querySelector('.feedback'),
     form: document.querySelector('.rss-form'),
     feeds: document.querySelector('.feeds'),
@@ -127,10 +124,16 @@ const app = async () => {
       if (!id) {
         return;
       }
+      watchedState.UIstate.posts.forEach((post) => {
+        if (post.postID === id) {
+          post.watched = true;
+        }
+      });
       watchedState.modal = id;
     });
     elements.form.addEventListener('submit', (evt) => {
       evt.preventDefault();
+      watchedState.formState = 'sending';
       const url = elements.input.value.trim();
       validateUrl(url, watchedState.feeds, watchedState.feedsTemp)
         .then(() => {
@@ -148,6 +151,9 @@ const app = async () => {
           };
           watchedState.rssLink.error = getErrorCode(e);
           watchedState.rssLink.isValid = false;
+        })
+        .finally(() => {
+          watchedState.formState = 'ready';
         });
     });
     getUpdates(watchedState);
