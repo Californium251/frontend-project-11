@@ -1,6 +1,7 @@
 import onChange from 'on-change';
 
 const renderError = (element, error, i18nextInstance) => {
+  console.log(i18nextInstance);
   if (error === '') {
     element.textContent = ' ';
   } else {
@@ -143,7 +144,6 @@ export default (state, i18nextInstance, elements) => {
       case 'rssLink.error':
         renderError(
           elements.feedback,
-          elements.input,
           watchedState.rssLink.error,
           i18nextInstance,
         );

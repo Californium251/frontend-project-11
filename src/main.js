@@ -11,7 +11,6 @@ const addProxy = (url) => `https://allorigins.hexlet.app/get?disableCache=true&u
 const getPosts = (watchedState, url) => axios
   .get(addProxy(url))
   .then((res) => {
-    watchedState.rssLink.RSSadded = true;
     const { feedData, postsData } = parser(res.data.contents);
     const feedID = _.uniqueId('feed-');
     watchedState.feeds = [...watchedState.feeds, {
@@ -40,7 +39,7 @@ const getPosts = (watchedState, url) => axios
     watchedState.rssLink.error = getErrorCode(e);
   })
   .finally(() => {
-    watchedState.feedsTemp = [];
+    watchedState.formState = 'ready';
   });
 
 const getUpdates = (watchedState) => {
@@ -68,16 +67,13 @@ const app = async () => {
   const initialState = {
     formState: 'ready',
     rssLink: {
-      value: '',
       isValid: true,
       error: '',
-      RSSadded: false,
     },
     UIstate: {
       posts: [],
     },
     feeds: [],
-    feedsTemp: [],
     posts: [],
     modal: null,
   };
@@ -114,9 +110,9 @@ const app = async () => {
       .string()
       .required()
       .url();
-    const validateUrl = (url, feedsArr, feedsTemp) => {
+    const validateUrl = (url, feedsArr) => {
       const feedUrls = feedsArr.map((feed) => feed.url);
-      const actualUrlSchema = inputSchema.notOneOf(feedUrls).notOneOf(feedsTemp);
+      const actualUrlSchema = inputSchema.notOneOf(feedUrls);
       return actualUrlSchema.validate(url);
     };
     elements.posts.addEventListener('click', (evt) => {
@@ -135,9 +131,8 @@ const app = async () => {
       evt.preventDefault();
       watchedState.formState = 'sending';
       const url = elements.input.value.trim();
-      validateUrl(url, watchedState.feeds, watchedState.feedsTemp)
+      validateUrl(url, watchedState.feeds)
         .then(() => {
-          watchedState.feedsTemp.push(url);
           watchedState.rssLink.error = '';
           watchedState.rssLink.isValid = true;
           return getPosts(watchedState, url);
@@ -151,9 +146,6 @@ const app = async () => {
           };
           watchedState.rssLink.error = getErrorCode(e);
           watchedState.rssLink.isValid = false;
-        })
-        .finally(() => {
-          watchedState.formState = 'ready';
         });
     });
     getUpdates(watchedState);
