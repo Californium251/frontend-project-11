@@ -9,7 +9,7 @@ export default (data) => {
   const nodeList = parsedData.querySelectorAll('item');
   if (nodeList.length === 0) {
     const e = new Error();
-    e.isParsingError = true;
+    e.noRss = true;
     throw e;
   }
   const items = Array.from(nodeList)

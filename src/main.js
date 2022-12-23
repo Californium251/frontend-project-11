@@ -39,10 +39,12 @@ const getPosts = (watchedState, url) => axios
       if (err.isParsingError) {
         return 'parserError';
       }
+      if (err.noRss) {
+        return 'noRSS';
+      }
       if (axios.isAxiosError(err)) {
         return err.name;
       }
-      console.log(err);
       return 'unknown';
     };
     watchedState.form.error = getErrorCode(e);
