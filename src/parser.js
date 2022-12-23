@@ -6,7 +6,13 @@ export default (data) => {
     e.isParsingError = true;
     throw e;
   }
-  const items = Array.from(parsedData.querySelectorAll('item'))
+  const nodeList = parsedData.querySelectorAll('item');
+  if (nodeList.length === 0) {
+    const e = new Error();
+    e.isParsingError = true;
+    throw e;
+  }
+  const items = Array.from(nodeList)
     .map((item) => {
       const itemTitle = item.querySelector('title').textContent;
       const itemLink = item.querySelector('guid').textContent;

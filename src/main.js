@@ -42,6 +42,7 @@ const getPosts = (watchedState, url) => axios
       if (axios.isAxiosError(err)) {
         return err.name;
       }
+      console.log(err);
       return 'unknown';
     };
     watchedState.form.error = getErrorCode(e);
