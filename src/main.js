@@ -8,6 +8,10 @@ import parser from './parser';
 import 'bootstrap';
 
 const addProxy = (url) => `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
+const updateUIposts = (posts, watchedState) => {
+  const UIposts = posts.map((post) => ({ postID: post.postID, watched: false }));
+  watchedState.UIstate.posts = [...watchedState.UIstate.posts, ...UIposts];
+};
 const getPosts = (watchedState, url) => axios
   .get(addProxy(url))
   .then((res) => {
@@ -25,6 +29,10 @@ const getPosts = (watchedState, url) => axios
       return post;
     });
     watchedState.posts = [...watchedState.posts, ...posts];
+    return posts;
+  })
+  .then((posts) => {
+    updateUIposts(posts, watchedState);
   })
   .catch((e) => {
     const getErrorCode = (err) => {
@@ -36,10 +44,10 @@ const getPosts = (watchedState, url) => axios
       }
       return 'unknown';
     };
-    watchedState.rssLink.error = getErrorCode(e);
+    watchedState.form.error = getErrorCode(e);
   })
   .finally(() => {
-    watchedState.formState = 'ready';
+    watchedState.form.state = 'ready';
   });
 
 const getUpdates = (watchedState) => {
@@ -55,6 +63,9 @@ const getUpdates = (watchedState) => {
       return post;
     });
     watchedState.posts = [...watchedState.posts, ...newPosts];
+    return newPosts;
+  }).then((posts) => {
+    updateUIposts(posts, watchedState);
   }).catch((e) => {
     console.log(e.message);
   }));
@@ -65,8 +76,8 @@ const getUpdates = (watchedState) => {
 
 const app = async () => {
   const initialState = {
-    formState: 'ready',
-    rssLink: {
+    form: {
+      state: 'ready',
       isValid: true,
       error: '',
     },
@@ -126,15 +137,17 @@ const app = async () => {
         }
       });
       watchedState.modal = id;
+      watchedState.posts = [...watchedState.posts];
     });
     elements.form.addEventListener('submit', (evt) => {
       evt.preventDefault();
-      watchedState.formState = 'sending';
-      const url = elements.input.value.trim();
+      watchedState.form.state = 'sending';
+      const formData = new FormData(evt.target);
+      const url = formData.get('url');
       validateUrl(url, watchedState.feeds)
         .then(() => {
-          watchedState.rssLink.error = '';
-          watchedState.rssLink.isValid = true;
+          watchedState.form.error = '';
+          watchedState.form.isValid = true;
           return getPosts(watchedState, url);
         })
         .catch((e) => {
@@ -144,8 +157,9 @@ const app = async () => {
             }
             return 'unknown';
           };
-          watchedState.rssLink.error = getErrorCode(e);
-          watchedState.rssLink.isValid = false;
+          watchedState.form.error = getErrorCode(e);
+          watchedState.form.isValid = false;
+          watchedState.form.state = 'ready';
         });
     });
     getUpdates(watchedState);

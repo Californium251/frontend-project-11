@@ -1,17 +1,16 @@
 import onChange from 'on-change';
 
 const renderError = (element, error, i18nextInstance) => {
-  console.log(i18nextInstance);
   if (error === '') {
-    element.textContent = ' ';
+    element.textContent = '';
   } else {
     element.classList.add('text-danger');
     element.textContent = i18nextInstance.t(error);
   }
 };
 
-const renderFeeds = (feeds, element, feedsHeader, i18nextInstance) => {
-  const addFeedList = (el, header, i18next) => {
+const renderFeeds = (feeds, element, i18nextInstance) => {
+  const addFeedList = () => {
     const card = document.createElement('div');
     const cardBody = document.createElement('div');
     const cardBodyHeader = document.createElement('h2');
@@ -20,11 +19,11 @@ const renderFeeds = (feeds, element, feedsHeader, i18nextInstance) => {
     cardBody.classList.add('card-body');
     cardBodyHeader.classList.add('card-title', 'h4');
     list.classList.add('list-group', 'border-0', 'rounded-0');
-    cardBodyHeader.textContent = i18next.t(header);
+    cardBodyHeader.textContent = i18nextInstance.t('feedsHeader');
     cardBody.append(cardBodyHeader);
     card.append(cardBody);
     card.append(list);
-    el.append(card);
+    element.append(card);
     return list;
   };
 
@@ -42,13 +41,18 @@ const renderFeeds = (feeds, element, feedsHeader, i18nextInstance) => {
     feedList.append(li);
   };
 
-  const feedList = element.querySelector('.list-group') || addFeedList(element, feedsHeader, i18nextInstance);
+  const feedList = element.querySelector('.list-group') || addFeedList();
   feedList.innerHTML = '';
   feeds.forEach((feed) => addFeed(feed, feedList));
 };
 
-const renderItems = (posts, element, UIposts, buttonText, itemsHeader, i18nextInstance) => {
-  const addItemsList = (el, header, i18next) => {
+const renderItems = (
+  posts,
+  element,
+  UIposts,
+  i18nextInstance,
+) => {
+  const addItemsList = () => {
     const card = document.createElement('div');
     const cardBody = document.createElement('div');
     const cardHeader = document.createElement('h2');
@@ -57,15 +61,15 @@ const renderItems = (posts, element, UIposts, buttonText, itemsHeader, i18nextIn
     cardBody.classList.add('card-body');
     cardHeader.classList.add('card-title', 'h4');
     ul.classList.add('list-group', 'border-0', 'rounded-0');
-    cardHeader.textContent = i18next.t(header);
+    cardHeader.textContent = i18nextInstance.t('itemsHeader');
     cardBody.append(cardHeader);
     card.append(cardBody);
     card.append(ul);
-    el.append(card);
+    element.append(card);
     return ul;
   };
 
-  const addItem = (post, watchedPosts, btnText, itemsList, i18next) => {
+  const addItem = (post, watchedPosts, itemsList) => {
     const li = document.createElement('li');
     const link = document.createElement('a');
     const button = document.createElement('button');
@@ -84,13 +88,13 @@ const renderItems = (posts, element, UIposts, buttonText, itemsHeader, i18nextIn
     button.setAttribute('data-bs-toggle', 'modal');
     button.setAttribute('data-bs-target', '#modal');
     button.setAttribute('data-post-id', post.postID);
-    button.textContent = i18next.t(btnText);
+    button.textContent = i18nextInstance.t('showItemButton');
     li.append(link);
     li.append(button);
     itemsList.append(li);
   };
 
-  const itemsList = element.querySelector('.list-group') || addItemsList(element, itemsHeader, i18nextInstance);
+  const itemsList = element.querySelector('.list-group') || addItemsList();
   itemsList.innerHTML = '';
   const watchedPosts = UIposts.reduce((acc, post) => {
     if (post.watched) {
@@ -98,7 +102,7 @@ const renderItems = (posts, element, UIposts, buttonText, itemsHeader, i18nextIn
     }
     return acc;
   }, []);
-  posts.forEach((post) => addItem(post, watchedPosts, buttonText, itemsList, i18nextInstance));
+  posts.forEach((post) => addItem(post, watchedPosts, itemsList));
 };
 
 const renderModal = (element, post) => {
@@ -123,54 +127,39 @@ const renderValidationErr = (state, inputEl) => {
   }
 };
 
-const getNewUIPosts = (posts, UIposts) => {
-  const UIpostsIDs = UIposts.map((post) => post.postID);
-  const newPostsIDs = posts.map((post) => post.postID).filter((id) => !UIpostsIDs.includes(id));
-  return posts
-    .filter((post) => newPostsIDs.includes(post.postID))
-    .map((post) => ({ postID: post.postID, watched: false }));
-};
-
 export default (state, i18nextInstance, elements) => {
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
-      case 'formState':
+      case 'form.state':
         if (value === 'sending') {
           elements.submitButton.setAttribute('disabled', true);
         } else if (value === 'ready') {
           elements.submitButton.removeAttribute('disabled');
         }
         break;
-      case 'rssLink.error':
+      case 'form.error':
         renderError(
           elements.feedback,
-          watchedState.rssLink.error,
+          watchedState.form.error,
           i18nextInstance,
         );
         break;
-      case 'rssLink.isValid':
-        renderValidationErr(watchedState.rssLink.isValid, elements.input);
+      case 'form.isValid':
+        renderValidationErr(watchedState.form.isValid, elements.input);
         break;
       case 'feeds':
         renderFeeds(
           value,
           elements.feeds,
-          'feedsHeader',
           i18nextInstance,
         );
         renderRSSloaded(elements.feedback, 'RSSok', i18nextInstance);
         break;
       case 'posts':
-        watchedState.UIstate.posts = [
-          ...watchedState.UIstate.posts,
-          ...getNewUIPosts(value, watchedState.UIstate.posts),
-        ];
         renderItems(
           value,
           elements.posts,
           watchedState.UIstate.posts,
-          'showItemButton',
-          'itemsHeader',
           i18nextInstance,
         );
         break;
@@ -179,7 +168,6 @@ export default (state, i18nextInstance, elements) => {
           elements.modal,
           watchedState.posts.filter((post) => post.postID === value)[0],
         );
-        watchedState.posts = [...watchedState.posts];
         break;
       default:
         break;
