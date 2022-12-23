@@ -135,6 +135,7 @@ export default (state, i18nextInstance, elements) => {
           elements.submitButton.setAttribute('disabled', true);
         } else if (value === 'ready') {
           elements.submitButton.removeAttribute('disabled');
+          elements.form.elements.url.value = '';
         }
         break;
       case 'form.error':
