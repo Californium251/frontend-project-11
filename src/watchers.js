@@ -3,10 +3,15 @@ import onChange from 'on-change';
 const renderFeedback = (elements, type, text, i18nextInstance) => {
   const { feedback, input } = elements;
   switch (type) {
-    case 'error':
+    case 'validation error':
       feedback.classList.remove('text-success');
       feedback.classList.add('text-danger');
       input.classList.add('is-invalid');
+      break;
+    case 'error':
+      feedback.classList.remove('text-success');
+      feedback.classList.add('text-danger');
+      input.classList.remove('is-invalid');
       break;
     case 'success':
       feedback.classList.add('text-success');
@@ -130,6 +135,9 @@ export default (state, i18nextInstance, elements) => {
             elements.submitButton.removeAttribute('disabled');
             break;
           case 'validation error':
+            renderFeedback(elements, 'validation error', watchedState.form.error, i18nextInstance);
+            break;
+          case 'error':
             renderFeedback(elements, 'error', watchedState.form.error, i18nextInstance);
             break;
           case 'rss loaded':

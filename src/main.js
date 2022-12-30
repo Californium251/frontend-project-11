@@ -35,12 +35,16 @@ const getPosts = (watchedState, url) => axios
       if (err.isParsingError) {
         return 'parserError';
       }
+      if (err.noRSS) {
+        return 'noRSS';
+      }
       if (axios.isAxiosError(err)) {
         return err.name;
       }
       return 'unknown';
     };
     watchedState.form.error = getErrorCode(e);
+    watchedState.form.state = 'error';
   })
   .finally(() => {
     watchedState.form.state = 'ready';

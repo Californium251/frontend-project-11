@@ -6,6 +6,11 @@ export default (data) => {
     e.isParsingError = true;
     throw e;
   }
+  if (!parsedData.querySelector('rss')) {
+    const e = new Error();
+    e.noRSS = true;
+    throw e;
+  }
   const nodeList = parsedData.querySelectorAll('item');
   const items = Array.from(nodeList)
     .map((item) => {
