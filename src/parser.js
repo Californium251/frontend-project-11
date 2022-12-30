@@ -7,11 +7,6 @@ export default (data) => {
     throw e;
   }
   const nodeList = parsedData.querySelectorAll('item');
-  if (nodeList.length === 0) {
-    const e = new Error();
-    e.noRss = true;
-    throw e;
-  }
   const items = Array.from(nodeList)
     .map((item) => {
       const itemTitle = item.querySelector('title').textContent;

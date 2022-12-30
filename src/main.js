@@ -8,10 +8,6 @@ import parser from './parser';
 import 'bootstrap';
 
 const addProxy = (url) => `https://allorigins.hexlet.app/get?disableCache=true&url=${encodeURIComponent(url)}`;
-const updateUIposts = (posts, watchedState) => {
-  const UIposts = posts.map((post) => ({ postID: post.postID, watched: false }));
-  watchedState.UIstate.posts = [...watchedState.UIstate.posts, ...UIposts];
-};
 const getPosts = (watchedState, url) => axios
   .get(addProxy(url))
   .then((res) => {
@@ -31,16 +27,13 @@ const getPosts = (watchedState, url) => axios
     watchedState.posts = [...watchedState.posts, ...posts];
     return posts;
   })
-  .then((posts) => {
-    updateUIposts(posts, watchedState);
+  .then(() => {
+    watchedState.form.state = 'rss loaded';
   })
   .catch((e) => {
     const getErrorCode = (err) => {
       if (err.isParsingError) {
         return 'parserError';
-      }
-      if (err.noRss) {
-        return 'noRSS';
       }
       if (axios.isAxiosError(err)) {
         return err.name;
@@ -54,24 +47,25 @@ const getPosts = (watchedState, url) => axios
   });
 
 const getUpdates = (watchedState) => {
-  const promises = watchedState.feeds.map((feed) => axios.get(addProxy(feed.url)).then((res) => {
-    const { postsData } = parser(res.data.contents);
-    const getNewPosts = (state, postsArr) => {
-      const flatState = state.map((postEl) => postEl.link);
-      return postsArr.filter((postEl) => !flatState.includes(postEl.link));
-    };
-    const newPosts = getNewPosts(watchedState.posts, postsData).map((post) => {
-      post.postID = _.uniqueId('post-');
-      post.feedID = feed.feedID;
-      return post;
+  const promises = watchedState.feeds.map((feed) => {
+    const urlWithProxy = addProxy(feed.url);
+    return axios.get(urlWithProxy).then((res) => {
+      const { postsData } = parser(res.data.contents);
+      const getNewPosts = (state, postsArr) => {
+        const flatState = state.map((postEl) => postEl.link);
+        return postsArr.filter((postEl) => !flatState.includes(postEl.link));
+      };
+      const newPosts = getNewPosts(watchedState.posts, postsData).map((post) => {
+        post.postID = _.uniqueId('post-');
+        post.feedID = feed.feedID;
+        return post;
+      });
+      watchedState.posts = [...watchedState.posts, ...newPosts];
+      return newPosts;
+    }).catch((e) => {
+      console.log(e.message);
     });
-    watchedState.posts = [...watchedState.posts, ...newPosts];
-    return newPosts;
-  }).then((posts) => {
-    updateUIposts(posts, watchedState);
-  }).catch((e) => {
-    console.log(e.message);
-  }));
+  });
   Promise.all(promises).finally(() => setTimeout(() => {
     getUpdates(watchedState);
   }, 5000));
@@ -81,7 +75,6 @@ const app = async () => {
   const initialState = {
     form: {
       state: 'ready',
-      isValid: true,
       error: '',
     },
     UIstate: {
@@ -134,11 +127,7 @@ const app = async () => {
       if (!id) {
         return;
       }
-      watchedState.UIstate.posts.forEach((post) => {
-        if (post.postID === id) {
-          post.watched = true;
-        }
-      });
+      watchedState.UIstate.posts = [...watchedState.UIstate.posts, id];
       watchedState.modal = id;
       watchedState.posts = [...watchedState.posts];
     });
@@ -150,8 +139,7 @@ const app = async () => {
       validateUrl(url, watchedState.feeds)
         .then(() => {
           watchedState.form.error = '';
-          watchedState.form.isValid = true;
-          return getPosts(watchedState, url);
+          getPosts(watchedState, url);
         })
         .catch((e) => {
           const getErrorCode = (error) => {
@@ -161,7 +149,7 @@ const app = async () => {
             return 'unknown';
           };
           watchedState.form.error = getErrorCode(e);
-          watchedState.form.isValid = false;
+          watchedState.form.state = 'validation error';
           watchedState.form.state = 'ready';
         });
     });

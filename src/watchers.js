@@ -1,15 +1,26 @@
 import onChange from 'on-change';
 
-const renderError = (element, error, i18nextInstance) => {
-  if (error === '') {
-    element.textContent = '';
-  } else {
-    element.classList.add('text-danger');
-    element.textContent = i18nextInstance.t(error);
+const renderFeedback = (elements, type, text, i18nextInstance) => {
+  const { feedback, input } = elements;
+  switch (type) {
+    case 'error':
+      feedback.classList.remove('text-success');
+      feedback.classList.add('text-danger');
+      input.classList.add('is-invalid');
+      break;
+    case 'success':
+      feedback.classList.add('text-success');
+      feedback.classList.remove('text-danger');
+      input.classList.remove('is-invalid');
+      input.value = '';
+      break;
+    default:
+      break;
   }
+  feedback.textContent = i18nextInstance.t(text);
 };
 
-const renderFeeds = (feeds, element, i18nextInstance) => {
+const renderFeeds = (element, feeds, i18nextInstance) => {
   const addFeedList = () => {
     const card = document.createElement('div');
     const cardBody = document.createElement('div');
@@ -47,8 +58,8 @@ const renderFeeds = (feeds, element, i18nextInstance) => {
 };
 
 const renderItems = (
-  posts,
   element,
+  posts,
   UIposts,
   i18nextInstance,
 ) => {
@@ -69,12 +80,12 @@ const renderItems = (
     return ul;
   };
 
-  const addItem = (post, watchedPosts, itemsList) => {
+  const addItem = (post, itemsList) => {
     const li = document.createElement('li');
     const link = document.createElement('a');
     const button = document.createElement('button');
     li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-start', 'border-0', 'border-end-0');
-    if (watchedPosts.includes(post.postID)) {
+    if (UIposts.includes(post.postID)) {
       link.classList.add('fw-normal');
     } else {
       link.classList.add('fw-bold');
@@ -96,13 +107,7 @@ const renderItems = (
 
   const itemsList = element.querySelector('.list-group') || addItemsList();
   itemsList.innerHTML = '';
-  const watchedPosts = UIposts.reduce((acc, post) => {
-    if (post.watched) {
-      acc.push(post.postID);
-    }
-    return acc;
-  }, []);
-  posts.forEach((post) => addItem(post, watchedPosts, itemsList));
+  posts.forEach((post) => addItem(post, itemsList));
 };
 
 const renderModal = (element, post) => {
@@ -113,55 +118,38 @@ const renderModal = (element, post) => {
   element.querySelector('a.btn-primary').setAttribute('href', post.link);
 };
 
-const renderRSSloaded = (input, key, i18nextInstance) => {
-  input.classList.add('text-success');
-  input.classList.remove('text-danger');
-  input.textContent = i18nextInstance.t(key);
-};
-
-const renderValidationErr = (state, inputEl) => {
-  if (state === false) {
-    inputEl.classList.add('is-invalid');
-  } else {
-    inputEl.classList.remove('is-invalid');
-  }
-};
-
 export default (state, i18nextInstance, elements) => {
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
       case 'form.state':
-        if (value === 'sending') {
-          elements.submitButton.setAttribute('disabled', true);
-        } else if (value === 'ready') {
-          elements.submitButton.removeAttribute('disabled');
-          if (state.form.error.length === 0) {
-            elements.input.value = '';
-          }
+        switch (value) {
+          case 'sending':
+            elements.submitButton.setAttribute('disabled', true);
+            break;
+          case 'ready':
+            elements.submitButton.removeAttribute('disabled');
+            break;
+          case 'validation error':
+            renderFeedback(elements, 'error', watchedState.form.error, i18nextInstance);
+            break;
+          case 'rss loaded':
+            renderFeedback(elements, 'success', 'RSSok', i18nextInstance);
+            break;
+          default:
+            break;
         }
-        break;
-      case 'form.error':
-        renderError(
-          elements.feedback,
-          watchedState.form.error,
-          i18nextInstance,
-        );
-        break;
-      case 'form.isValid':
-        renderValidationErr(watchedState.form.isValid, elements.input);
         break;
       case 'feeds':
         renderFeeds(
-          value,
           elements.feeds,
+          value,
           i18nextInstance,
         );
-        renderRSSloaded(elements.feedback, 'RSSok', i18nextInstance);
         break;
       case 'posts':
         renderItems(
-          value,
           elements.posts,
+          value,
           watchedState.UIstate.posts,
           i18nextInstance,
         );
