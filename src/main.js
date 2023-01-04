@@ -25,7 +25,7 @@ const getPosts = (watchedState, url) => axios
       return post;
     });
     watchedState.posts = [...watchedState.posts, ...newPosts];
-    watchedState.form.state = 'rss loaded';
+    watchedState.dataLoad.state = 'success';
   })
   .catch((e) => {
     const getErrorCode = (err) => {
@@ -37,8 +37,9 @@ const getPosts = (watchedState, url) => axios
       }
       return 'unknown';
     };
-    watchedState.form.error = getErrorCode(e);
-    watchedState.form.state = 'error';
+    console.log(e);
+    watchedState.dataLoad.error = getErrorCode(e);
+    watchedState.dataLoad.state = 'error';
   });
 
 const getUpdates = (watchedState) => {
@@ -69,6 +70,10 @@ const app = async () => {
   const initialState = {
     form: {
       state: 'ready',
+      error: '',
+    },
+    dataLoad: {
+      state: 'idle',
       error: '',
     },
     UIstate: {
@@ -133,8 +138,9 @@ const app = async () => {
       const url = formData.get('url');
       validateUrl(url, watchedState.feeds)
         .then(() => {
-          watchedState.form.error = '';
           getPosts(watchedState, url);
+          watchedState.form.error = '';
+          watchedState.form.state = 'ready';
         })
         .catch((e) => {
           const getErrorCode = (error) => {
@@ -144,7 +150,7 @@ const app = async () => {
             return 'unknown';
           };
           watchedState.form.error = getErrorCode(e);
-          watchedState.form.state = 'validation error';
+          watchedState.form.state = 'error';
         });
     });
     getUpdates(watchedState);

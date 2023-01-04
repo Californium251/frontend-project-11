@@ -1,28 +1,23 @@
 import onChange from 'on-change';
 
-const renderFeedback = (elements, type, text, i18nextInstance) => {
+const renderValidationError = (elements, text, i18nextInstance) => {
   const { feedback, input } = elements;
-  switch (type) {
-    case 'validation error':
-      feedback.classList.remove('text-success');
-      feedback.classList.add('text-danger');
-      input.classList.add('is-invalid');
-      break;
-    case 'error':
-      feedback.classList.remove('text-success');
-      feedback.classList.add('text-danger');
-      input.classList.remove('is-invalid');
-      break;
-    case 'success':
-      feedback.classList.add('text-success');
-      feedback.classList.remove('text-danger');
-      input.classList.remove('is-invalid');
-      input.value = '';
-      break;
-    default:
-      break;
-  }
+  feedback.classList.remove('text-success');
+  feedback.classList.add('text-danger');
+  input.classList.add('is-invalid');
   feedback.textContent = i18nextInstance.t(text);
+};
+
+const renderDataLoadedFeedback = (feedBackElement, text, i18nextInstance) => {
+  feedBackElement.classList.remove('text-danger');
+  feedBackElement.classList.add('text-success');
+  feedBackElement.textContent = i18nextInstance.t(text);
+};
+
+const renderDataLoadError = (feedBackElement, type, text, i18nextInstance) => {
+  feedBackElement.classList.remove('text-success');
+  feedBackElement.classList.add('text-danger');
+  feedBackElement.textContent = i18nextInstance.t(text);
 };
 
 const renderFeeds = (element, feeds, i18nextInstance) => {
@@ -133,18 +128,28 @@ export default (state, i18nextInstance, elements) => {
             break;
           case 'ready':
             elements.submitButton.removeAttribute('disabled');
-            break;
-          case 'validation error':
-            elements.submitButton.removeAttribute('disabled');
-            renderFeedback(elements, 'validation error', watchedState.form.error, i18nextInstance);
+            elements.input.classList.remove('is-invalid');
             break;
           case 'error':
             elements.submitButton.removeAttribute('disabled');
-            renderFeedback(elements, 'error', watchedState.form.error, i18nextInstance);
+            renderValidationError(elements, watchedState.form.error, i18nextInstance);
             break;
-          case 'rss loaded':
-            elements.submitButton.removeAttribute('disabled');
-            renderFeedback(elements, 'success', 'RSSok', i18nextInstance);
+          default:
+            break;
+        }
+        break;
+      case 'dataLoad.state':
+        switch (value) {
+          case 'error':
+            renderDataLoadError(
+              elements.feedback,
+              watchedState.dataLoad.error,
+              i18nextInstance,
+            );
+            break;
+          case 'success':
+            renderDataLoadedFeedback(elements.feedback, 'RSSok', i18nextInstance);
+            elements.input.value = '';
             break;
           default:
             break;
