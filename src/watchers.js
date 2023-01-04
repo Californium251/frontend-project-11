@@ -135,12 +135,15 @@ export default (state, i18nextInstance, elements) => {
             elements.submitButton.removeAttribute('disabled');
             break;
           case 'validation error':
+            elements.submitButton.removeAttribute('disabled');
             renderFeedback(elements, 'validation error', watchedState.form.error, i18nextInstance);
             break;
           case 'error':
+            elements.submitButton.removeAttribute('disabled');
             renderFeedback(elements, 'error', watchedState.form.error, i18nextInstance);
             break;
           case 'rss loaded':
+            elements.submitButton.removeAttribute('disabled');
             renderFeedback(elements, 'success', 'RSSok', i18nextInstance);
             break;
           default:
@@ -155,9 +158,10 @@ export default (state, i18nextInstance, elements) => {
         );
         break;
       case 'posts':
+      case 'UIstate.posts':
         renderItems(
           elements.posts,
-          value,
+          watchedState.posts,
           watchedState.UIstate.posts,
           i18nextInstance,
         );

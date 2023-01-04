@@ -1,14 +1,9 @@
 export default (data) => {
   const domParser = new DOMParser();
   const parsedData = domParser.parseFromString(data, 'text/html');
-  if (parsedData.querySelector('parsererror')) {
+  if (parsedData.querySelector('parsererror') || !parsedData.querySelector('rss')) {
     const e = new Error();
     e.isParsingError = true;
-    throw e;
-  }
-  if (!parsedData.querySelector('rss')) {
-    const e = new Error();
-    e.noRSS = true;
     throw e;
   }
   const nodeList = parsedData.querySelectorAll('item');
@@ -24,11 +19,11 @@ export default (data) => {
       };
     });
   const result = {
-    feedData: {
+    feed: {
       title: parsedData.querySelector('title').textContent,
       description: parsedData.querySelector('description').textContent,
     },
-    postsData: items,
+    posts: items,
   };
   return result;
 };
