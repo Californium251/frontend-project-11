@@ -14,7 +14,7 @@ const renderDataLoadedFeedback = (feedBackElement, text, i18nextInstance) => {
   feedBackElement.textContent = i18nextInstance.t(text);
 };
 
-const renderDataLoadError = (feedBackElement, type, text, i18nextInstance) => {
+const renderDataLoadError = (feedBackElement, text, i18nextInstance) => {
   feedBackElement.classList.remove('text-success');
   feedBackElement.classList.add('text-danger');
   feedBackElement.textContent = i18nextInstance.t(text);
