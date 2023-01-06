@@ -1,7 +1,7 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "[![Actions Status](https://github.com/Californium251/frontend-project-11/workflows/hexlet-check/badge.svg)](https://github.com/Californium251/frontend-project-11/actions)",
+  "description": "This is a tool to read several RSS feeds in one place. It reads the posts in each feed you add. Also, it will check if new posts are added in each feed and render them if so.",
   "private": true,
   "scripts": {
     "start": "webpack serve --mode development",

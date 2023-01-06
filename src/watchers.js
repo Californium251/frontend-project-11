@@ -1,23 +1,44 @@
 import onChange from 'on-change';
 
-const renderValidationError = (elements, text, i18nextInstance) => {
+const renderForm = (elements, value, error, i18nextInstance) => {
+  const { feedback, input, submitButton } = elements;
+  switch (value) {
+    case 'sending':
+      submitButton.setAttribute('disabled', true);
+      break;
+    case 'ready':
+      submitButton.removeAttribute('disabled');
+      elements.input.classList.remove('is-invalid');
+      break;
+    case 'error':
+      submitButton.removeAttribute('disabled');
+      feedback.classList.remove('text-success');
+      feedback.classList.add('text-danger');
+      input.classList.add('is-invalid');
+      feedback.textContent = i18nextInstance.t(error);
+      break;
+    default:
+      break;
+  }
+};
+
+const renderDataLoad = (elements, value, error, i18nextInstance) => {
   const { feedback, input } = elements;
-  feedback.classList.remove('text-success');
-  feedback.classList.add('text-danger');
-  input.classList.add('is-invalid');
-  feedback.textContent = i18nextInstance.t(text);
-};
-
-const renderDataLoadedFeedback = (feedBackElement, text, i18nextInstance) => {
-  feedBackElement.classList.remove('text-danger');
-  feedBackElement.classList.add('text-success');
-  feedBackElement.textContent = i18nextInstance.t(text);
-};
-
-const renderDataLoadError = (feedBackElement, text, i18nextInstance) => {
-  feedBackElement.classList.remove('text-success');
-  feedBackElement.classList.add('text-danger');
-  feedBackElement.textContent = i18nextInstance.t(text);
+  switch (value) {
+    case 'error':
+      feedback.classList.remove('text-success');
+      feedback.classList.add('text-danger');
+      feedback.textContent = i18nextInstance.t(error);
+      break;
+    case 'success':
+      feedback.classList.remove('text-danger');
+      feedback.classList.add('text-success');
+      feedback.textContent = i18nextInstance.t('RSSok');
+      input.value = '';
+      break;
+    default:
+      break;
+  }
 };
 
 const renderFeeds = (element, feeds, i18nextInstance) => {
@@ -122,38 +143,10 @@ export default (state, i18nextInstance, elements) => {
   const watchedState = onChange(state, (path, value) => {
     switch (path) {
       case 'form.state':
-        switch (value) {
-          case 'sending':
-            elements.submitButton.setAttribute('disabled', true);
-            break;
-          case 'ready':
-            elements.submitButton.removeAttribute('disabled');
-            elements.input.classList.remove('is-invalid');
-            break;
-          case 'error':
-            elements.submitButton.removeAttribute('disabled');
-            renderValidationError(elements, watchedState.form.error, i18nextInstance);
-            break;
-          default:
-            break;
-        }
+        renderForm(elements, value, watchedState.form.error, i18nextInstance);
         break;
       case 'dataLoad.state':
-        switch (value) {
-          case 'error':
-            renderDataLoadError(
-              elements.feedback,
-              watchedState.dataLoad.error,
-              i18nextInstance,
-            );
-            break;
-          case 'success':
-            renderDataLoadedFeedback(elements.feedback, 'RSSok', i18nextInstance);
-            elements.input.value = '';
-            break;
-          default:
-            break;
-        }
+        renderDataLoad(elements, value, watchedState.dataLoad.error, i18nextInstance);
         break;
       case 'feeds':
         renderFeeds(

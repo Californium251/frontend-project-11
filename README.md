@@ -1,21 +1,13 @@
-# 🚀 Welcome to your new awesome project!
+# RSS aggregator
 
-This project has been created using **webpack-cli**, you can now run
-
-```
-npm run build
-```
-
-or
-
-```
-yarn build
-```
-
-to bundle your application
-
+This is a tool to read several RSS feeds in one place. It reads the posts in each feed you add. Also, it will check if new posts are added in each feed and render them if so.
 
 [Link to the website](https://frontend-project-11-rose.vercel.app/)
+
+## Installation
+```bash
+npm install
+```
 
 [![Actions Status](https://github.com/Californium251/frontend-project-11/workflows/hexlet-check/badge.svg)](https://github.com/Californium251/frontend-project-11/actions)
 
